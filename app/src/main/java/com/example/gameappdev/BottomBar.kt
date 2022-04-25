@@ -16,10 +16,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 fun BottomNavigationBar(navController: NavController) {
     val items = listOf(
         NavigationItem.Home,
-        NavigationItem.Music,
         NavigationItem.Store,
-        NavigationItem.Settings,
-        NavigationItem.Profile
+        NavigationItem.Settings
     )
     BottomNavigation(
         backgroundColor = MaterialTheme.colors.primaryVariant,
@@ -60,17 +58,11 @@ fun Navigation(navController: NavHostController) {
         composable(NavigationItem.Home.route) {
             HomeScreen(navController = navController)
         }
-        composable(NavigationItem.Music.route) {
-            MusicScreen(navController = navController)
-        }
         composable(NavigationItem.Store.route) {
             StoreScreen(navController = navController)
         }
         composable(NavigationItem.Settings.route) {
             SettingsScreen(navController = navController)
-        }
-        composable(NavigationItem.Profile.route) {
-            ProfileScreen(navController = navController)
         }
         composable(NavigationItem.NewGame.route) {
             NewGameScreen(navController = navController)

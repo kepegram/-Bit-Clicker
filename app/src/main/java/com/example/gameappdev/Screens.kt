@@ -77,27 +77,6 @@ fun NewGameScreen(navController: NavController) {
 }
 
 @Composable
-fun MusicScreen(navController: NavController) {
-    TopBar(
-        title = "Music"
-    )
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .wrapContentSize(Alignment.Center)
-    ) {
-        Text(
-            text = "Music View",
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colors.primaryVariant,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center,
-            fontSize = 25.sp
-        )
-    }
-}
-
-@Composable
 fun StoreScreen(navController: NavController) {
     TopBar(
         title = "Store"
@@ -130,27 +109,6 @@ fun SettingsScreen(navController: NavController) {
     ) {
         Text(
             text = "Settings View",
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colors.primaryVariant,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center,
-            fontSize = 25.sp
-        )
-    }
-}
-
-@Composable
-fun ProfileScreen(navController: NavController) {
-    TopBar(
-        title = "Profile"
-    )
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .wrapContentSize(Alignment.Center)
-    ) {
-        Text(
-            text = "Profile View",
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colors.primaryVariant,
             modifier = Modifier.align(Alignment.CenterHorizontally),

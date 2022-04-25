@@ -9,9 +9,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class NavigationItem(var route: String, val image: ImageVector, var title: String) {
     object Home : NavigationItem("home", image = Icons.Filled.Home,  "Home")
-    object Music : NavigationItem("music", image = Icons.Filled.Star , "Music")
     object Store : NavigationItem("store", image = Icons.Filled.ShoppingCart, "Store")
     object Settings : NavigationItem("settings", image = Icons.Filled.Settings, "Settings")
-    object Profile : NavigationItem("profile", image = Icons.Filled.Person,  "Profile")
     object NewGame : NavigationItem("newGame", image = Icons.Filled.Add, "New Game")
 }
