@@ -45,6 +45,17 @@ fun HomeScreen(navController: NavController) {
     }
 }
 
+// Save State for player data (not working)
+/*fun CreatePlayerData(){
+
+    val string = "hello world!"
+    val fos = FileOutputStream(File("/Users/ryleyziegler/cosc435/proj1/appdev/app/src/main/java/com/example/gameappdev/", "Demo.txt"))
+    val bytesArray: ByteArray = string.toByteArray()
+    fos.write(bytesArray)
+    fos.flush()
+    fos.close()
+}*/
+
 @Composable
 fun NewGameScreen(navController: NavController) {
     Column(
