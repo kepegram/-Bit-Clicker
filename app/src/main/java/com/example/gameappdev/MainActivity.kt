@@ -13,17 +13,17 @@ import androidx.compose.ui.Modifier
 import androidx.room.Room
 import androidx.test.core.app.ActivityScenario.launch
 import androidx.test.core.app.ApplicationProvider
+import com.example.gameappdev.api.call.fetchPlayerStartData
 import com.example.gameappdev.database.PlayerData
 import com.example.gameappdev.database.PlayerDatabase
 
-import com.example.gameappdev.database.fetchPlayerStartData
 import com.example.gameappdev.ui.theme.GameAppDevTheme
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        //fetchPlayerStartData()
+        fetchPlayerStartData()
         //val instance = PlayerDatabase.getInstance(context = applicationContext)
         //val playerDataDao = instance.playerDataDao()
         //val allPlayerData = playerDataDao.getPlayerData()
@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
                 //val context = ApplicationProvider.getApplicationContext<Context>()
                 db.playerDataDao().addPlayerData(PlayerData(0, 1, 1, 1, 1))
                 val allPlayerData = db.playerDataDao().getPlayerData()
-                d("test","findddd ${allPlayerData.toString()}")
+                d("test","findddd ${allPlayerData}")
             }
         }
 
