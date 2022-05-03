@@ -10,6 +10,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+//import com.example.gameappdev.database.dbInstance
 
 // contains all the screens
 
@@ -32,7 +33,10 @@ fun HomeScreen(navController: NavController) {
         )
         //Button should start a new game.
         Row(modifier = Modifier.padding(25.dp)) {
-            Button(onClick = {navController.navigate("newGame")}){
+            Button(onClick = {
+                navController.navigate("newGame")
+
+            }){
                 Text(text = "New Game")
             }
         }
