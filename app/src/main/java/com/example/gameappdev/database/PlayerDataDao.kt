@@ -9,10 +9,10 @@ import androidx.room.Query
 @Dao
 interface PlayerDataDao {
     @Query("SELECT * FROM PlayerDataTable")
-    fun getPlayerData(): LiveData<List<PlayerData>>
+    fun getPlayerData(): List<PlayerData>
 
     @Insert
-    suspend fun addPlayerData(playerData: PlayerData)
+    suspend fun addPlayerData(vararg playerData: PlayerData)
 
     @Delete
     suspend fun deletePlayerData(playerData: PlayerData)
