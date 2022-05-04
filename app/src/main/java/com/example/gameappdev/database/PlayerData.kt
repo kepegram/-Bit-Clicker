@@ -21,4 +21,6 @@ data class PlayerData(
     @ColumnInfo(name = "baseClickValue") var baseClickValue: Int,
     @ColumnInfo(name = "perClickMultiplier") var perClickMultiplier: Int,
     @ColumnInfo(name = "expCurrency") var expCurrency: Int,
-)
+) {
+
+}

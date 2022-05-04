@@ -11,8 +11,8 @@ import kotlinx.coroutines.runBlocking
 import okhttp3.*
 import java.io.IOException
 
-//Fetch using OkHttpClient() and my github Json.
-fun fetchPlayerStartData(applicationContext: Context) {
+//Fetch using OkHttpClient() and the github Json.
+fun fetchPlayerStartData(applicationContext: Context){
     val client = OkHttpClient()
     val url = "https://rziegl2.github.io/json.io/"
     val request = Request.Builder()
@@ -39,7 +39,6 @@ fun fetchPlayerStartData(applicationContext: Context) {
                 launch{
                     d("test","id${apResult.id}")
                     d("test","test ${apResult.toString()}")
-                    //val context = ApplicationProvider.getApplicationContext<Context>()
 
                     //Inserting the apResult data from api call into DB.
                     db.playerDataDao().addPlayerData(PlayerData

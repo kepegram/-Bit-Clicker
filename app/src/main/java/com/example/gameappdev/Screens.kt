@@ -1,5 +1,6 @@
 package com.example.gameappdev
 
+import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -10,12 +11,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.gameappdev.api.call.fetchPlayerStartData
+import com.example.gameappdev.database.PlayerData
+
 //import com.example.gameappdev.database.dbInstance
 
 // contains all the screens
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavController, context: Context) {
     TopBar(
         title = "Infinite Clicker"
     )
@@ -35,7 +39,7 @@ fun HomeScreen(navController: NavController) {
         Row(modifier = Modifier.padding(25.dp)) {
             Button(onClick = {
                 navController.navigate("newGame")
-
+                val playerData = fetchPlayerStartData(context)
             }){
                 Text(text = "New Game")
             }

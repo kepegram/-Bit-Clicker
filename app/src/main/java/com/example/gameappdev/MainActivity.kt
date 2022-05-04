@@ -19,7 +19,7 @@ import kotlinx.coroutines.runBlocking
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        fetchPlayerStartData(applicationContext)
+        //fetchPlayerStartData(applicationContext)
         super.onCreate(savedInstanceState)
         setContent {
             GameAppDevTheme {
@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    AppMainScreen()
+                    AppMainScreen(applicationContext)
                 }
             }
         }

@@ -1,5 +1,6 @@
 package com.example.gameappdev
 
+import android.content.Context
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -9,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.gameappdev.database.PlayerData
 
 // function that creates the bottom nav bar
 
@@ -53,10 +55,10 @@ fun BottomNavigationBar(navController: NavController) {
 // function that creates the navhost and defines the routes
 
 @Composable
-fun Navigation(navController: NavHostController) {
+fun Navigation(navController: NavHostController,context: Context) {
     NavHost(navController, startDestination = NavigationItem.Home.route) {
         composable(NavigationItem.Home.route) {
-            HomeScreen(navController = navController)
+            HomeScreen(navController = navController,context = context)
         }
         composable(NavigationItem.Store.route) {
             StoreScreen(navController = navController)
