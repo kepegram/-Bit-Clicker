@@ -51,12 +51,12 @@ fun BottomNavigationBar(navController: NavController) {
 }
 
 // function that creates the navhost and defines the routes
-
+/*
 @Composable
-fun Navigation(navController: NavHostController) {
+fun Navigation(navController: NavHostController, openDrawer: () -> Unit) {
     NavHost(navController, startDestination = NavigationItem.Home.route) {
         composable(NavigationItem.Home.route) {
-            HomeScreen(navController = navController)
+            HomeScreen(navController = navController, openDrawer = { openDrawer() })
         }
         composable(NavigationItem.Store.route) {
             StoreScreen(navController = navController)
@@ -69,3 +69,5 @@ fun Navigation(navController: NavHostController) {
         }
     }
 }
+
+ */

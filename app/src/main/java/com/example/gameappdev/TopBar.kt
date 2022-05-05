@@ -2,18 +2,26 @@ package com.example.gameappdev
 
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.vector.ImageVector
 
-// parameters needed for created the topbar in each screen
+// parameters needed for creating the topbar in each screen
 
 @Composable
 fun TopBar(
-    title: String = ""
+    title: String = "",
+    buttonIcon: ImageVector,
+    onButtonClicked: () -> Unit
 ) {
     TopAppBar(
         title = {
             Text(
                 text = title
             )
+        },
+        navigationIcon = {
+            IconButton(onClick = { onButtonClicked() } ) {
+                Icon(buttonIcon, contentDescription = "")
+            }
         },
         backgroundColor = MaterialTheme.colors.primaryVariant
     )
