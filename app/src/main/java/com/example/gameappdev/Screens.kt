@@ -1,31 +1,101 @@
 package com.example.gameappdev
 
+import android.view.animation.OvershootInterpolator
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import kotlinx.coroutines.delay
 
 // contains all the screens
+@Composable
+fun SplashScreen(navController: NavController) {
+    val scale = remember {
+        androidx.compose.animation.core.Animatable(0f)
+    }
+    // AnimationEffect
+    LaunchedEffect(key1 = true) {
+        scale.animateTo(
+            targetValue = 0.7f,
+            animationSpec = tween(
+                durationMillis = 800,
+                easing = {
+                    OvershootInterpolator(4f).getInterpolation(it)
+                })
+        )
+        delay(3000L)
+        navController.navigate("Home")
+    }
+    // Image
+    Box(contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize()) {
+        Image(painter = painterResource(id = R.drawable.logo),
+            contentDescription = "Logo",
+            modifier = Modifier.scale(scale.value))
+    }
+}
 
 @Composable
-fun HomeScreen(navController: NavController, openDrawer: () -> Unit) {
+fun HomeScreen(navController: NavController, openDrawer: () -> Unit)
+{
     Scaffold(
         topBar = {
             TopBar(
-                title = "Infinite Clicker",
+                title = "Bit Clicker Home",
                 buttonIcon = Icons.Filled.Menu,
                 onButtonClicked = { openDrawer() }
             )
         },
-        bottomBar = { BottomNavigationBar(navController) }
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { run { navController.navigate("newGame") } },
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = null
+                )
+            }
+        },
+        floatingActionButtonPosition = FabPosition.Center,
+        isFloatingActionButtonDocked = true,
+        bottomBar = {
+            BottomAppBar(
+                cutoutShape = MaterialTheme.shapes.small.copy(
+                    CornerSize(percent = 50)
+                )
+            ) {
+                BottomNavigationBar(navController)
+            }
+        }
     ) {
         Column(
             verticalArrangement= Arrangement.Top,
@@ -34,25 +104,63 @@ fun HomeScreen(navController: NavController, openDrawer: () -> Unit) {
                 .fillMaxSize()
                 .wrapContentSize(Alignment.Center)
         ) {
-            Text(
-                text = "INFINITE CLICKER",
-                fontSize = 28.sp,
-                modifier = Modifier.padding(70.dp),
+            val infiniteTransition = rememberInfiniteTransition()
+
+            val heartSize by infiniteTransition.animateFloat(
+                initialValue = 100.0f,
+                targetValue = 250.0f,
+                animationSpec = infiniteRepeatable(
+                    animation = tween(800, delayMillis = 100,easing = FastOutLinearInEasing),
+                    repeatMode = RepeatMode.Reverse
+                )
             )
+            Image(
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = "Logo",
+                modifier = Modifier.size(heartSize.dp)
+            )
+            Text(
+                text = "BIT CLICKER",
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(30.dp),
+            )
+        }
+        /*
+        Column(
+            verticalArrangement= Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxSize()
+                .wrapContentSize(Alignment.Center)
+        ) {
             //Button should start a new game.
-            Row(modifier = Modifier.padding(25.dp)) {
+            Row(modifier = Modifier.padding(15.dp)) {
                 Button(onClick = {navController.navigate("newGame")}){
-                    Text(text = "New Game")
+                    Text(text = "New Game", color = Color.Black)
                 }
             }
             //Button should resume game.
-            Row(modifier = Modifier.padding(25.dp)) {
+            Row(modifier = Modifier.padding(15.dp)) {
                 Button(onClick = {""}){
-                    Text(text = "Continue Game")
+                    Text(text = "Continue Game", color = Color.Black)
                 }
             }
         }
+        */
     }
+}
+@Composable
+fun CircleImage(imageSize: Dp) {
+    Image(
+        painter = painterResource(R.drawable.logo),
+        contentDescription = "Circle Image",
+        contentScale = ContentScale.Crop,
+        modifier = Modifier
+            .size(imageSize)
+            .clip(CircleShape)
+            .border(5.dp, Color.Gray, CircleShape)
+    )
 }
 
 @Composable
@@ -65,35 +173,53 @@ fun NewGameScreen(navController: NavController) {
                 .wrapContentSize(Alignment.Center)
         ) {
             val counter: MutableState<Int> = remember { mutableStateOf(0) }
-            Text(
-                text = counter.value.toString(),
-                modifier = Modifier.padding(16.dp),
-            )
-            Button(
-                onClick = {
-                    counter.value++
+            val isNeedExpansion = rememberSaveable{ mutableStateOf(false) }
+            val animatedSizeDp: Dp by animateDpAsState(targetValue = if (isNeedExpansion.value) 350.dp else 100.dp)
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                CircleImage(animatedSizeDp)
+                Button(
+                    onClick = {
+                        isNeedExpansion.value = !isNeedExpansion.value
+                    },
+                    modifier = Modifier
+                        .padding(top = 50.dp)
+                        .width(300.dp)
+                ) {
+                    Text(
+                        text = counter.value.toString(),
+                        modifier = Modifier.padding(16.dp),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 28.sp
+                    )
+                    Button(
+                        onClick = {
+                            counter.value++
+                        }
+                    ) {
+                        Text(
+                            text = "CLICK ME!",
+                            color = Color.Black
+                        )
+                    }
                 }
-            ) {
-                Text(
-                    text = "CLICK ME!"
-                )
-            }
-            Row(modifier = Modifier.padding(25.dp)) {
-                Button(onClick = { navController.navigate("home") }) {
-                    Text(text = "Return Home")
+                Row(modifier = Modifier.padding(25.dp)) {
+                    Button(onClick = { navController.navigate("home") }) {
+                        Text(text = "Return Home", color = Color.Black)
+                    }
                 }
             }
         }
     }
 
+/*
 @Composable
 fun StoreScreen(navController: NavController) {
     Scaffold(
         topBar = {
             TopBar(
                 title = "Infinite Clicker",
-                buttonIcon = Icons.Filled.Menu,
-                onButtonClicked = { "" }
+                buttonIcon = Icons.Filled.ArrowBack,
+                onButtonClicked = { navController.navigate("home") }
             )
         },
         bottomBar = { BottomNavigationBar(navController) }
@@ -114,6 +240,7 @@ fun StoreScreen(navController: NavController) {
         }
     }
 }
+*/
 
 @Composable
 fun SettingsScreen(navController: NavController) {
@@ -121,8 +248,8 @@ fun SettingsScreen(navController: NavController) {
         topBar = {
             TopBar(
                 title = "Infinite Clicker",
-                buttonIcon = Icons.Filled.Menu,
-                onButtonClicked = { "" }
+                buttonIcon = Icons.Filled.ArrowBack,
+                onButtonClicked = { navController.navigate("home") }
             )
         },
         bottomBar = { BottomNavigationBar(navController) }
@@ -148,8 +275,8 @@ fun SettingsScreen(navController: NavController) {
 fun CreditsScreen(navController: NavController) {
     TopBar(
         title = "Credits",
-        buttonIcon = Icons.Filled.Menu,
-        onButtonClicked = { "" }
+        buttonIcon = Icons.Filled.ArrowBack,
+        onButtonClicked = { navController.navigate("home") }
     )
     Column(
         modifier = Modifier
@@ -157,17 +284,12 @@ fun CreditsScreen(navController: NavController) {
             .wrapContentSize(Alignment.Center)
     ) {
         Text(
-            text = "App by: Ryley, Kadin, William, Everett",
+            text = "App by:\n Ryley\n Kadin\n William\n Everett",
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colors.primaryVariant,
             modifier = Modifier.align(Alignment.CenterHorizontally),
             textAlign = TextAlign.Center,
             fontSize = 25.sp
         )
-        Row(modifier = Modifier.padding(25.dp)) {
-            Button(onClick = { navController.navigate("home") }) {
-                Text(text = "Return Home")
-            }
-        }
     }
 }

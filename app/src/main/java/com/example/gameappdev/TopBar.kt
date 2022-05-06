@@ -2,6 +2,7 @@ package com.example.gameappdev
 
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 
 // parameters needed for creating the topbar in each screen
@@ -15,7 +16,8 @@ fun TopBar(
     TopAppBar(
         title = {
             Text(
-                text = title
+                text = title,
+                color = Color.Black
             )
         },
         navigationIcon = {

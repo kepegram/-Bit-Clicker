@@ -16,7 +16,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 fun BottomNavigationBar(navController: NavController) {
     val items = listOf(
         NavigationItem.Home,
-        NavigationItem.Store,
         NavigationItem.Settings
     )
     BottomNavigation(
@@ -29,9 +28,9 @@ fun BottomNavigationBar(navController: NavController) {
             BottomNavigationItem(
                 icon = { Icon(imageVector = item.image,
                     contentDescription = item.title) },
-                label = { Text(text = item.title) },
+                label = { Text(text = item.title, color = Color.Black) },
                 selectedContentColor = Color.White,
-                unselectedContentColor = Color.White.copy(0.4f),
+                unselectedContentColor = Color.Black.copy(0.4f),
                 alwaysShowLabel = true,
                 selected = currentRoute == item.route,
                 onClick = {
@@ -49,25 +48,3 @@ fun BottomNavigationBar(navController: NavController) {
         }
     }
 }
-
-// function that creates the navhost and defines the routes
-/*
-@Composable
-fun Navigation(navController: NavHostController, openDrawer: () -> Unit) {
-    NavHost(navController, startDestination = NavigationItem.Home.route) {
-        composable(NavigationItem.Home.route) {
-            HomeScreen(navController = navController, openDrawer = { openDrawer() })
-        }
-        composable(NavigationItem.Store.route) {
-            StoreScreen(navController = navController)
-        }
-        composable(NavigationItem.Settings.route) {
-            SettingsScreen(navController = navController)
-        }
-        composable(NavigationItem.NewGame.route) {
-            NewGameScreen(navController = navController)
-        }
-    }
-}
-
- */

@@ -40,13 +40,14 @@ fun AppMainScreen() {
         ) {
             NavHost(
                 navController = navController,
-                startDestination = NavigationItem.Home.route
+                //startDestination = NavigationItem.Home.route
+                startDestination = "splash_screen"
             ) {
+                composable("splash_screen") {
+                    SplashScreen(navController = navController)
+                }
                 composable(NavigationItem.Home.route) {
                     HomeScreen(navController = navController, openDrawer = { openDrawer() })
-                }
-                composable(NavigationItem.Store.route) {
-                    StoreScreen(navController = navController)
                 }
                 composable(NavigationItem.Settings.route) {
                     SettingsScreen(navController = navController)
