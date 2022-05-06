@@ -1,5 +1,6 @@
 package com.example.gameappdev
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.material.*
@@ -11,7 +12,7 @@ import androidx.navigation.compose.composable
 import kotlinx.coroutines.launch
 
 @Composable
-fun AppMainScreen() {
+fun AppMainScreen(context: Context) {
     val navController = rememberNavController()
     Surface(color = MaterialTheme.colors.background) {
         val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -47,7 +48,7 @@ fun AppMainScreen() {
                     SplashScreen(navController = navController)
                 }
                 composable(NavigationItem.Home.route) {
-                    HomeScreen(navController = navController, openDrawer = { openDrawer() })
+                    HomeScreen(navController = navController, openDrawer = { openDrawer() }, context = context)
                 }
                 composable(NavigationItem.Settings.route) {
                     SettingsScreen(navController = navController)

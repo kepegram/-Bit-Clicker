@@ -1,5 +1,6 @@
 package com.example.gameappdev
 
+import android.content.Context
 import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
@@ -34,6 +35,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.gameappdev.call.fetchDatabase
+import com.example.gameappdev.call.fetchPlayerStartData
+import com.example.gameappdev.database.PlayerDatabase
 import kotlinx.coroutines.delay
 
 // contains all the screens
@@ -65,8 +69,9 @@ fun SplashScreen(navController: NavController) {
 }
 
 @Composable
-fun HomeScreen(navController: NavController, openDrawer: () -> Unit)
+fun HomeScreen(navController: NavController, openDrawer: () -> Unit, context: Context)
 {
+    var db : PlayerDatabase
     Scaffold(
         topBar = {
             TopBar(
@@ -77,7 +82,10 @@ fun HomeScreen(navController: NavController, openDrawer: () -> Unit)
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { run { navController.navigate("newGame") } },
+                onClick = { run { navController.navigate("newGame") }
+                    fetchPlayerStartData(context)
+                    db = fetchDatabase(context)
+                          },
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
