@@ -1,6 +1,7 @@
 package com.example.gameappdev
 
 import android.content.Context
+import android.util.Log
 import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
@@ -35,10 +36,15 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.room.Database
 import com.example.gameappdev.call.fetchDatabase
 import com.example.gameappdev.call.fetchPlayerStartData
+import com.example.gameappdev.database.PlayerData
 import com.example.gameappdev.database.PlayerDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 // contains all the screens
 @Composable
@@ -69,9 +75,13 @@ fun SplashScreen(navController: NavController) {
 }
 
 @Composable
-fun HomeScreen(navController: NavController, openDrawer: () -> Unit, context: Context)
+fun HomeScreen(
+    navController: NavController,
+    openDrawer: () -> Unit,
+    context: Context,
+    callCounter: MutableState<Int>
+)
 {
-    var db : PlayerDatabase
     Scaffold(
         topBar = {
             TopBar(
@@ -83,9 +93,15 @@ fun HomeScreen(navController: NavController, openDrawer: () -> Unit, context: Co
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { run { navController.navigate("newGame") }
-                    fetchPlayerStartData(context)
-                    db = fetchDatabase(context)
-                          },
+
+                    //Ensures only one initial creation of db and api call.
+                    if(callCounter.value == 0)
+                        fetchPlayerStartData(context)
+                        callCounter.value++
+                        Log.d("test", "findwww ${callCounter.value}")
+
+
+                },
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
@@ -172,17 +188,17 @@ fun CircleImage(imageSize: Dp) {
 }
 
 @Composable
-fun NewGameScreen(navController: NavController) {
-        Column(
+fun NewGameScreen(navController: NavController, context: Context, displayCounter: MutableState<Int>) {
+    Column(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
                 .wrapContentSize(Alignment.Center)
         ) {
-            val counter: MutableState<Int> = remember { mutableStateOf(0) }
             val isNeedExpansion = rememberSaveable{ mutableStateOf(false) }
             val animatedSizeDp: Dp by animateDpAsState(targetValue = if (isNeedExpansion.value) 350.dp else 100.dp)
+
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 CircleImage(animatedSizeDp)
                 Button(
@@ -194,14 +210,33 @@ fun NewGameScreen(navController: NavController) {
                         .width(300.dp)
                 ) {
                     Text(
-                        text = counter.value.toString(),
+                        text = displayCounter.value.toString(),
                         modifier = Modifier.padding(16.dp),
                         fontWeight = FontWeight.Bold,
                         fontSize = 28.sp
                     )
                     Button(
                         onClick = {
-                            counter.value++
+
+                            //Coroutine in order to access database.
+                            //This updates the value of the players expCurrency per click.
+                            GlobalScope.launch(Dispatchers.IO) {
+                                var db = fetchDatabase(context)
+                                var allPlayer = db.playerDataDao().getPlayerData()
+                                allPlayer[0].expCurrency ++
+                                Log.d("test", "findxxx ${allPlayer[0].expCurrency}")
+                                db.playerDataDao().addPlayerData(PlayerData(
+                                    0,
+                                    allPlayer[0].level,
+                                    allPlayer[0].baseClickValue,
+                                    allPlayer[0].perClickMultiplier,
+                                    allPlayer[0].expCurrency))
+
+                                //Updating displayCounter to display the correct value.
+                                displayCounter.value = allPlayer[0].expCurrency
+
+                            }
+
                         }
                     ) {
                         Text(
@@ -301,3 +336,5 @@ fun CreditsScreen(navController: NavController) {
         )
     }
 }
+
+

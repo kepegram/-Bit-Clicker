@@ -6,6 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import com.example.gameappdev.ui.theme.GameAppDevTheme
@@ -21,7 +24,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    AppMainScreen(context = applicationContext)
+                    //Ensures new game is only initialized once.
+                    val callCounter: MutableState<Int> = remember { mutableStateOf(0) }
+
+                    //Ensures persistence of display counter when going from home screen to new screen, etc.
+                    val displayCounter: MutableState<Int> = remember { mutableStateOf(0) }
+
+                    AppMainScreen(context = applicationContext, callCounter, displayCounter)
                 }
             }
         }

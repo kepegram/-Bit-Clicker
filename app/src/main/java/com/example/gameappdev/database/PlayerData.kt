@@ -6,7 +6,7 @@ import okhttp3.*
 
 @Entity(tableName = "PlayerDataTable")
 data class PlayerData(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     var id: Int,
     @ColumnInfo(name = "level") var level: Int,
     @ColumnInfo(name = "baseClickValue") var baseClickValue: Int,

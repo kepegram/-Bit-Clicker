@@ -1,19 +1,21 @@
 package com.example.gameappdev
 
 import android.content.Context
-import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.material.*
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.*
-import androidx.navigation.NavController
+import androidx.compose.runtime.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import kotlinx.coroutines.launch
 
 @Composable
-fun AppMainScreen(context: Context) {
+fun AppMainScreen(
+    context: Context,
+    callCounter: MutableState<Int>,
+    displayCounter: MutableState<Int>
+) {
     val navController = rememberNavController()
+
     Surface(color = MaterialTheme.colors.background) {
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val scope = rememberCoroutineScope()
@@ -48,13 +50,13 @@ fun AppMainScreen(context: Context) {
                     SplashScreen(navController = navController)
                 }
                 composable(NavigationItem.Home.route) {
-                    HomeScreen(navController = navController, openDrawer = { openDrawer() }, context = context)
+                    HomeScreen(navController = navController, openDrawer = { openDrawer() }, context = context, callCounter)
                 }
                 composable(NavigationItem.Settings.route) {
                     SettingsScreen(navController = navController)
                 }
                 composable(NavigationItem.NewGame.route) {
-                    NewGameScreen(navController = navController)
+                    NewGameScreen(navController = navController, context = context, displayCounter)
                 }
                 composable(DrawerScreens.Credits.route) {
                     CreditsScreen(navController = navController)

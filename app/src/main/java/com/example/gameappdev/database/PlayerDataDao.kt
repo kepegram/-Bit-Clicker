@@ -1,16 +1,13 @@
 package com.example.gameappdev.database
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface PlayerDataDao {
     @Query("SELECT * FROM PlayerDataTable")
     fun getPlayerData(): List<PlayerData>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addPlayerData(vararg playerData: PlayerData)
 
     @Delete

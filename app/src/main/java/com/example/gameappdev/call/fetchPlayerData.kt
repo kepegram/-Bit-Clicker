@@ -10,9 +10,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-//Fetch using OkHttpClient() and the github Json.
+//Fetch using Retrofit and the github Json.
 fun fetchPlayerStartData(applicationContext: Context) {
     val url = "https://rziegl2.github.io"
+
+    //Creates usable call and converts data.
     val api = Retrofit.Builder()
         .baseUrl(url)
         .addConverterFactory(GsonConverterFactory.create())
@@ -21,6 +23,8 @@ fun fetchPlayerStartData(applicationContext: Context) {
 
     //Makes a new call to the rest api.
     GlobalScope.launch(Dispatchers.IO) {
+
+        //Gets data from the api call.
         val response = api.getData()
         d("test", "findfff $response")
 
@@ -58,11 +62,10 @@ fun fetchPlayerStartData(applicationContext: Context) {
 
 }
 
-fun fetchDatabase(applicationContext: Context): PlayerDatabase{
-    val db = Room.databaseBuilder(
+//Returns a build of the db to make it accessible.
+fun fetchDatabase(applicationContext: Context): PlayerDatabase {
+    return Room.databaseBuilder(
         applicationContext,
         PlayerDatabase::class.java, "PlayerDataTable"
     ).build()
-
-    return db
 }
