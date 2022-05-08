@@ -39,6 +39,7 @@ import androidx.navigation.NavController
 import androidx.room.Database
 import com.example.gameappdev.call.fetchDatabase
 import com.example.gameappdev.call.fetchPlayerStartData
+import com.example.gameappdev.database.DataApplication
 import com.example.gameappdev.database.PlayerData
 import com.example.gameappdev.database.PlayerDatabase
 import kotlinx.coroutines.Dispatchers
@@ -217,11 +218,13 @@ fun NewGameScreen(navController: NavController, context: Context, displayCounter
                     )
                     Button(
                         onClick = {
+                            //var db =DataApplication(applicationContext = context)
 
                             //Coroutine in order to access database.
                             //This updates the value of the players expCurrency per click.
                             GlobalScope.launch(Dispatchers.IO) {
-                                var db = fetchDatabase(context)
+                                //var db = DataApplication(applicationContext = context).database
+                               var db = fetchDatabase(context)
                                 var allPlayer = db.playerDataDao().getPlayerData()
                                 allPlayer[0].expCurrency ++
                                 Log.d("test", "findxxx ${allPlayer[0].expCurrency}")
