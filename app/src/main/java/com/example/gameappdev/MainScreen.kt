@@ -43,7 +43,6 @@ fun AppMainScreen(
         ) {
             NavHost(
                 navController = navController,
-                //startDestination = NavigationItem.Home.route
                 startDestination = "splash_screen"
             ) {
                 composable("splash_screen") {

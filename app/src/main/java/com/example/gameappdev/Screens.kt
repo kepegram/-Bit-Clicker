@@ -2,12 +2,10 @@ package com.example.gameappdev
 
 import android.content.Context
 import android.util.Log
+import android.view.PixelCopy
 import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -19,6 +17,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,6 +28,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -42,6 +42,10 @@ import com.example.gameappdev.call.fetchPlayerStartData
 import com.example.gameappdev.database.DataApplication
 import com.example.gameappdev.database.PlayerData
 import com.example.gameappdev.database.PlayerDatabase
+import com.example.gameappdev.ui.theme.Caption
+import com.example.gameappdev.ui.theme.ThemeViewModel
+import com.example.gameappdev.ui.theme.backgroundColor
+import com.example.gameappdev.ui.theme.captionColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -94,14 +98,11 @@ fun HomeScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { run { navController.navigate("newGame") }
-
                     //Ensures only one initial creation of db and api call.
                     if(callCounter.value == 0)
                         fetchPlayerStartData(context)
                         callCounter.value++
                         Log.d("test", "findwww ${callCounter.value}")
-
-
                 },
             ) {
                 Icon(
@@ -151,28 +152,6 @@ fun HomeScreen(
                 modifier = Modifier.padding(30.dp),
             )
         }
-        /*
-        Column(
-            verticalArrangement= Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxSize()
-                .wrapContentSize(Alignment.Center)
-        ) {
-            //Button should start a new game.
-            Row(modifier = Modifier.padding(15.dp)) {
-                Button(onClick = {navController.navigate("newGame")}){
-                    Text(text = "New Game", color = Color.Black)
-                }
-            }
-            //Button should resume game.
-            Row(modifier = Modifier.padding(15.dp)) {
-                Button(onClick = {""}){
-                    Text(text = "Continue Game", color = Color.Black)
-                }
-            }
-        }
-        */
     }
 }
 @Composable
@@ -203,8 +182,34 @@ fun NewGameScreen(navController: NavController, context: Context, displayCounter
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 CircleImage(animatedSizeDp)
                 Button(
+                    onClick = { isNeedExpansion.value = !isNeedExpansion.value }
+                ) {
+                    Text(
+                        text = "Expand Image!",
+                        color = Color.Black
+                    )
+                }
+                Button(
                     onClick = {
-                        isNeedExpansion.value = !isNeedExpansion.value
+                        //var db =DataApplication(applicationContext = context)
+                        //Coroutine in order to access database.
+                        //This updates the value of the players expCurrency per click.
+                        GlobalScope.launch(Dispatchers.IO) {
+                            //var db = DataApplication(applicationContext = context).database
+                            var db = fetchDatabase(context)
+                            var allPlayer = db.playerDataDao().getPlayerData()
+                            allPlayer[0].expCurrency ++
+                            Log.d("test", "findxxx ${allPlayer[0].expCurrency}")
+                            db.playerDataDao().addPlayerData(PlayerData(
+                                0,
+                                allPlayer[0].level,
+                                allPlayer[0].baseClickValue,
+                                allPlayer[0].perClickMultiplier,
+                                allPlayer[0].expCurrency))
+
+                            //Updating displayCounter to display the correct value.
+                            displayCounter.value = allPlayer[0].expCurrency
+                        }
                     },
                     modifier = Modifier
                         .padding(top = 50.dp)
@@ -216,37 +221,6 @@ fun NewGameScreen(navController: NavController, context: Context, displayCounter
                         fontWeight = FontWeight.Bold,
                         fontSize = 28.sp
                     )
-                    Button(
-                        onClick = {
-                            //var db =DataApplication(applicationContext = context)
-
-                            //Coroutine in order to access database.
-                            //This updates the value of the players expCurrency per click.
-                            GlobalScope.launch(Dispatchers.IO) {
-                                //var db = DataApplication(applicationContext = context).database
-                               var db = fetchDatabase(context)
-                                var allPlayer = db.playerDataDao().getPlayerData()
-                                allPlayer[0].expCurrency ++
-                                Log.d("test", "findxxx ${allPlayer[0].expCurrency}")
-                                db.playerDataDao().addPlayerData(PlayerData(
-                                    0,
-                                    allPlayer[0].level,
-                                    allPlayer[0].baseClickValue,
-                                    allPlayer[0].perClickMultiplier,
-                                    allPlayer[0].expCurrency))
-
-                                //Updating displayCounter to display the correct value.
-                                displayCounter.value = allPlayer[0].expCurrency
-
-                            }
-
-                        }
-                    ) {
-                        Text(
-                            text = "CLICK ME!",
-                            color = Color.Black
-                        )
-                    }
                 }
                 Row(modifier = Modifier.padding(25.dp)) {
                     Button(onClick = { navController.navigate("home") }) {
@@ -290,29 +264,69 @@ fun StoreScreen(navController: NavController) {
 
 @Composable
 fun SettingsScreen(navController: NavController) {
+    val context = LocalContext.current
+    val viewModel = remember {
+        ThemeViewModel(context.dataStore)
+    }
+    val value = viewModel.state.observeAsState().value
+    val systemInDarkTheme = isSystemInDarkTheme()
+    val darkModeChecked by remember(value) {
+        val checked = when (value) {
+            null -> systemInDarkTheme
+            else -> value
+        }
+        mutableStateOf(checked)
+    }
+    val useDeviceModeChecked by remember(value) {
+        val checked = when (value) {
+            null -> true
+            else -> false
+        }
+        mutableStateOf(checked)
+    }
+    LaunchedEffect(viewModel) {
+        viewModel.request()
+    }
     Scaffold(
         topBar = {
             TopBar(
-                title = "Infinite Clicker",
+                title = "Switch Theme",
                 buttonIcon = Icons.Filled.ArrowBack,
                 onButtonClicked = { navController.navigate("home") }
             )
         },
         bottomBar = { BottomNavigationBar(navController) }
     ) {
-        Column(
+        Box(
             modifier = Modifier
+                .background(backgroundColor())
                 .fillMaxSize()
-                .wrapContentSize(Alignment.Center)
         ) {
-            Text(
-                text = "Settings View",
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colors.primaryVariant,
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                textAlign = TextAlign.Center,
-                fontSize = 25.sp
-            )
+            Column(
+                modifier = Modifier.padding(40.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp),
+            ) {
+                Row {
+                    Caption(
+                        text = "\uD83C\uDF19  Dark mode",
+                        color = captionColor(),
+                        modifier = Modifier.weight(1f)
+                    )
+                    Switch(
+                        checked = darkModeChecked,
+                        onCheckedChange = { viewModel.switchToUseDarkMode(it) })
+                }
+                Row {
+                    Caption(
+                        text = "\uD83D\uDCF1  Use device settings",
+                        color = captionColor(),
+                        modifier = Modifier.weight(1f)
+                    )
+                    Switch(
+                        checked = useDeviceModeChecked,
+                        onCheckedChange = { viewModel.switchToUseSystemSettings(it) })
+                }
+            }
         }
     }
 }
@@ -339,5 +353,7 @@ fun CreditsScreen(navController: NavController) {
         )
     }
 }
+
+
 
 

@@ -25,6 +25,6 @@ fun TopBar(
                 Icon(buttonIcon, contentDescription = "")
             }
         },
-        backgroundColor = MaterialTheme.colors.primaryVariant
+        //backgroundColor = MaterialTheme.colors.primary
     )
 }
