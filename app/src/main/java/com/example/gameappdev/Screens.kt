@@ -299,7 +299,6 @@ fun SettingsScreen(navController: NavController) {
     ) {
         Box(
             modifier = Modifier
-                .background(backgroundColor())
                 .fillMaxSize()
         ) {
             Column(
@@ -310,7 +309,7 @@ fun SettingsScreen(navController: NavController) {
                     Caption(
                         text = "\uD83C\uDF19  Dark mode",
                         color = captionColor(),
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(5f)
                     )
                     Switch(
                         checked = darkModeChecked,
@@ -320,7 +319,7 @@ fun SettingsScreen(navController: NavController) {
                     Caption(
                         text = "\uD83D\uDCF1  Use device settings",
                         color = captionColor(),
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(5f)
                     )
                     Switch(
                         checked = useDeviceModeChecked,
