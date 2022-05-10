@@ -59,7 +59,7 @@ class PlayerViewModel(context: Application): AndroidViewModel(context) {
 
     //Returns the players current level.
     fun getCurrentLevel(): Int {
-         return currentLevel.value
+         return _playerData.value[0].level
     }
 
     //Returns the display-counter so its usable in screens.
@@ -70,7 +70,7 @@ class PlayerViewModel(context: Application): AndroidViewModel(context) {
     //Used to add level and update _levelMilestone to a new value.
     fun dealWithLevel(){
         _playerData.value = db.getPlayerData()
-        _levelMilestonesIndex.value = _playerData.value[0].level
+        _levelMilestonesIndex.value = _playerData.value[0].level-1
 
         Log.d("test", "findggg $_levelMilestonesIndex")
         Log.d("test", "findggg ${_levelMilestones.value[_levelMilestonesIndex.value]}")
