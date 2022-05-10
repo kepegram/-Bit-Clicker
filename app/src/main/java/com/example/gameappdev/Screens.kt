@@ -65,7 +65,7 @@ fun HomeScreen(navController: NavController, context: Context) {
 }*/
 
 @Composable
-fun NewGameScreen(navController: NavController) {
+fun NewGameScreen(navController: NavController, gameInfo: GameInfo) {
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -73,9 +73,19 @@ fun NewGameScreen(navController: NavController) {
             .fillMaxSize()
             .wrapContentSize(Alignment.Center)
     ) {
-        val counter: MutableState<Int> = remember { mutableStateOf(0) }
+        val counter: MutableState<Int> = remember { gameInfo.counter }
+        val text: MutableState<String> = remember { mutableStateOf(counter.value.toString())}
+        if (gameInfo.radix.value != 10){
+            if (gameInfo.radix.value == 2){
+                text.value = counter.value.toString(radix= 2) + "[2]"
+            }
+            else if (gameInfo.radix.value == 16){
+                text.value = "0x" + counter.value.toString(radix= 16)
+            }
+        }
+
         Text(
-            text = counter.value.toString(),
+            text = text.value,
             modifier = Modifier.padding(16.dp),
         )
         Button(
@@ -96,7 +106,7 @@ fun NewGameScreen(navController: NavController) {
 }
 
 @Composable
-fun StoreScreen(navController: NavController) {
+fun StoreScreen(navController: NavController, gameInfo: GameInfo) {
     TopBar(
         title = "Store"
     )
@@ -117,7 +127,7 @@ fun StoreScreen(navController: NavController) {
 }
 
 @Composable
-fun SettingsScreen(navController: NavController) {
+fun SettingsScreen(navController: NavController, gameInfo: GameInfo) {
     TopBar(
         title = "Settings"
     )
@@ -134,5 +144,20 @@ fun SettingsScreen(navController: NavController) {
             textAlign = TextAlign.Center,
             fontSize = 25.sp
         )
+        Row(modifier = Modifier.padding(25.dp)) {
+            Button(onClick = { gameInfo.setRad(2) }) {
+                Text(text = "Binary")
+            }
+        }
+        Row(modifier = Modifier.padding(25.dp)) {
+            Button(onClick = { gameInfo.setRad(10) }) {
+                Text(text = "Decimal")
+            }
+        }
+        Row(modifier = Modifier.padding(25.dp)) {
+            Button(onClick = { gameInfo.setRad(16) }) {
+                Text(text = "Hexidecimal")
+            }
+        }
     }
 }
