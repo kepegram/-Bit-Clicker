@@ -6,14 +6,13 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.gameappdev.viewmodel.PlayerViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun AppMainScreen(
     context: Context,
-    callCounter: MutableState<Int>,
-    displayCounter: MutableState<Int>,
-    currentLevel: MutableState<Int>
+    viewModel: PlayerViewModel
 ) {
     val navController = rememberNavController()
 
@@ -50,13 +49,13 @@ fun AppMainScreen(
                     SplashScreen(navController = navController)
                 }
                 composable(NavigationItem.Home.route) {
-                    HomeScreen(navController = navController, openDrawer = { openDrawer() }, context = context, callCounter, displayCounter)
+                    HomeScreen(navController = navController, openDrawer = { openDrawer() }, context = context, viewModel)
                 }
                 composable(NavigationItem.Settings.route) {
                     SettingsScreen(navController = navController)
                 }
                 composable(NavigationItem.NewGame.route) {
-                    NewGameScreen(navController = navController, context = context, displayCounter, currentLevel)
+                    NewGameScreen(navController = navController, context = context, viewModel)
                 }
                 composable(DrawerScreens.Credits.route) {
                     CreditsScreen(navController = navController)

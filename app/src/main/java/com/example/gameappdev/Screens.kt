@@ -38,6 +38,7 @@ import com.example.gameappdev.database.PlayerData
 import com.example.gameappdev.ui.theme.Caption
 import com.example.gameappdev.ui.theme.ThemeViewModel
 import com.example.gameappdev.ui.theme.captionColor
+import com.example.gameappdev.viewmodel.PlayerViewModel
 import kotlinx.coroutines.*
 
 // contains all the screens
@@ -73,8 +74,7 @@ fun HomeScreen(
     navController: NavController,
     openDrawer: () -> Unit,
     context: Context,
-    callCounter: MutableState<Int>,
-    displayCounter: MutableState<Int>
+    vm: PlayerViewModel
 )
 {
     Scaffold(
@@ -96,10 +96,12 @@ fun HomeScreen(
                                 .getPlayerData().isEmpty()) {
                             fetchPlayerStartData(context)
                         }
+                        //If database does exist set the display counter, "fake persist".
                         else{
-                            displayCounter.value =
+                            /*displayCounter =
                                 DataApplication(context).database.playerDataDao()
-                                    .getPlayerData()[0].expCurrency
+                                    .getPlayerData()[0].expCurrency*/
+                            vm.displayCounter.value = vm.getCount()
                         }
                     }
                 },
@@ -173,8 +175,7 @@ fun CircleImage(imageSize: Dp) {
 fun NewGameScreen(
     navController: NavController,
     context: Context,
-    displayCounter: MutableState<Int>,
-    currentLevel: MutableState<Int>
+    vm: PlayerViewModel
 ) {
 
     Column(
@@ -194,7 +195,7 @@ fun NewGameScreen(
                         .padding(1.dp)
                 ) {
                     //Displays the level of the player.
-                    Text("Level: ${currentLevel.value}", fontSize = 28.sp )
+                    Text("Level: ${vm.getCurrentLevel()}", fontSize = 28.sp )
                 }
                 CircleImage(animatedSizeDp)
                 Button(
@@ -212,19 +213,21 @@ fun NewGameScreen(
                         //This updates the value of the players expCurrency per click.
                         GlobalScope.launch(Dispatchers.IO) {
                             //var db = DataApplication(applicationContext = context).database
-                            var db = DataApplication(context).database
-                            var allPlayer = db.playerDataDao().getPlayerData()
-                            allPlayer[0].expCurrency ++
-                            Log.d("test", "findxxx ${allPlayer[0].expCurrency}")
-                            db.playerDataDao().addPlayerData(PlayerData(
+
+                            vm.incrementCount()
+                            //allPlayer[0].expCurrency ++
+                            //Log.d("test", "findxxx ${count}")
+                            vm.addPlayerData(PlayerData(
                                 0,
-                                allPlayer[0].level,
-                                allPlayer[0].baseClickValue,
-                                allPlayer[0].perClickMultiplier,
-                                allPlayer[0].expCurrency))
+                                vm.db.getPlayerData()[0].level,
+                                vm.db.getPlayerData()[0].baseClickValue,
+                                vm.db.getPlayerData()[0].perClickMultiplier,
+                                vm.playerData.value[0].expCurrency))
 
                             //Updating displayCounter to display the correct value.
-                            displayCounter.value = allPlayer[0].expCurrency
+                            vm.displayCounter.value = vm.playerData.value[0].expCurrency
+
+                            vm.dealWithLevel()
                         }
                     },
                     modifier = Modifier
@@ -232,7 +235,7 @@ fun NewGameScreen(
                         .width(300.dp)
                 ) {
                         Text(
-                            text = displayCounter.value.toString(),
+                            text = vm.displayCounter.value.toString(),
                             modifier = Modifier.padding(16.dp),
                             fontWeight = FontWeight.Bold,
                             fontSize = 28.sp

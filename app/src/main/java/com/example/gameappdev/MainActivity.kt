@@ -1,6 +1,5 @@
 package com.example.gameappdev
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,16 +8,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import androidx.datastore.preferences.preferencesDataStore
-import com.example.gameappdev.database.DataApplication
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.gameappdev.ui.theme.AppTheme
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.example.gameappdev.viewmodel.PlayerViewModel
 
 val Context.dataStore by preferencesDataStore("settings")
 
@@ -34,16 +29,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    //Ensures new game is only initialized once.
-                    val callCounter: MutableState<Int> = remember { mutableStateOf(0) }
-
-                    //Ensures persistence of display counter when going from home screen to new screen, etc.
-                    val displayCounter: MutableState<Int> = remember { mutableStateOf(0) }
-
-                    //Ensures persistence of currentLevel.
-                    val currentLevel: MutableState<Int> = remember { mutableStateOf(0) }
-
-                    AppMainScreen(context = applicationContext, callCounter, displayCounter ,currentLevel)
+                    val vm: PlayerViewModel = viewModel()
+                    AppMainScreen(
+                        context = applicationContext,
+                        vm
+                    )
                 }
             }
         }
