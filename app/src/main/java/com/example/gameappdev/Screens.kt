@@ -73,7 +73,8 @@ fun HomeScreen(
     navController: NavController,
     openDrawer: () -> Unit,
     context: Context,
-    callCounter: MutableState<Int>
+    callCounter: MutableState<Int>,
+    displayCounter: MutableState<Int>
 )
 {
     Scaffold(
@@ -90,11 +91,15 @@ fun HomeScreen(
                     run { navController.navigate("newGame") }
 
                     GlobalScope.launch(Dispatchers.IO) {
-                        //If expCurrency doesn't exist, fetch api and create db.
+                        //If Database doesn't exist, fetch api and create db.
                         if (DataApplication(context).database.playerDataDao()
-                                .getPlayerData()[0].expCurrency == null
-                        ) {
+                                .getPlayerData().isEmpty()) {
                             fetchPlayerStartData(context)
+                        }
+                        else{
+                            displayCounter.value =
+                                DataApplication(context).database.playerDataDao()
+                                    .getPlayerData()[0].expCurrency
                         }
                     }
                 },

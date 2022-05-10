@@ -50,7 +50,7 @@ fun AppMainScreen(
                     SplashScreen(navController = navController)
                 }
                 composable(NavigationItem.Home.route) {
-                    HomeScreen(navController = navController, openDrawer = { openDrawer() }, context = context, callCounter)
+                    HomeScreen(navController = navController, openDrawer = { openDrawer() }, context = context, callCounter, displayCounter)
                 }
                 composable(NavigationItem.Settings.route) {
                     SettingsScreen(navController = navController)

@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 val Context.dataStore by preferencesDataStore("settings")
 
 class MainActivity : ComponentActivity() {
-    @SuppressLint("CoroutineCreationDuringComposition")
+    //@SuppressLint("CoroutineCreationDuringComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -43,20 +43,7 @@ class MainActivity : ComponentActivity() {
                     //Ensures persistence of currentLevel.
                     val currentLevel: MutableState<Int> = remember { mutableStateOf(0) }
 
-                    //If no db set display counter to 0, otherwise retrieve and keep count from database
-                    GlobalScope.launch(Dispatchers.IO) {
-                        if (DataApplication(applicationContext).database.playerDataDao()
-                                .getPlayerData()[0].expCurrency == null
-                        ) {
-                            displayCounter.value = 0
-                        } else {
-                            displayCounter.value =
-                                DataApplication(applicationContext).database.playerDataDao()
-                                    .getPlayerData()[0].expCurrency
-                        }
-                    }
-
-                    AppMainScreen(context = applicationContext, callCounter, displayCounter,currentLevel)
+                    AppMainScreen(context = applicationContext, callCounter, displayCounter ,currentLevel)
                 }
             }
         }
