@@ -12,7 +12,8 @@ import kotlinx.coroutines.launch
 fun AppMainScreen(
     context: Context,
     callCounter: MutableState<Int>,
-    displayCounter: MutableState<Int>
+    displayCounter: MutableState<Int>,
+    currentLevel: MutableState<Int>
 ) {
     val navController = rememberNavController()
 
@@ -55,7 +56,7 @@ fun AppMainScreen(
                     SettingsScreen(navController = navController)
                 }
                 composable(NavigationItem.NewGame.route) {
-                    NewGameScreen(navController = navController, context = context, displayCounter)
+                    NewGameScreen(navController = navController, context = context, displayCounter, currentLevel)
                 }
                 composable(DrawerScreens.Credits.route) {
                     CreditsScreen(navController = navController)

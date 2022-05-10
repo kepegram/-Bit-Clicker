@@ -1,5 +1,6 @@
 package com.example.gameappdev
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -13,12 +14,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.gameappdev.database.DataApplication
 import com.example.gameappdev.ui.theme.AppTheme
-import com.example.gameappdev.ui.theme.GameAppDevTheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 val Context.dataStore by preferencesDataStore("settings")
 
 class MainActivity : ComponentActivity() {
+    @SuppressLint("CoroutineCreationDuringComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -34,7 +39,24 @@ class MainActivity : ComponentActivity() {
 
                     //Ensures persistence of display counter when going from home screen to new screen, etc.
                     val displayCounter: MutableState<Int> = remember { mutableStateOf(0) }
-                    AppMainScreen(context = applicationContext, callCounter, displayCounter)
+
+                    //Ensures persistence of currentLevel.
+                    val currentLevel: MutableState<Int> = remember { mutableStateOf(0) }
+
+                    //If no db set display counter to 0, otherwise retrieve and keep count from database
+                    GlobalScope.launch(Dispatchers.IO) {
+                        if (DataApplication(applicationContext).database.playerDataDao()
+                                .getPlayerData()[0].expCurrency == null
+                        ) {
+                            displayCounter.value = 0
+                        } else {
+                            displayCounter.value =
+                                DataApplication(applicationContext).database.playerDataDao()
+                                    .getPlayerData()[0].expCurrency
+                        }
+                    }
+
+                    AppMainScreen(context = applicationContext, callCounter, displayCounter,currentLevel)
                 }
             }
         }

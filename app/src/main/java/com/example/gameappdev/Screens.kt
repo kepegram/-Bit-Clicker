@@ -1,12 +1,11 @@
 package com.example.gameappdev
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
-import android.view.PixelCopy
 import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
@@ -15,18 +14,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -36,20 +31,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.room.Database
-import com.example.gameappdev.call.fetchDatabase
+//import com.example.gameappdev.call.fetchDatabase
 import com.example.gameappdev.call.fetchPlayerStartData
 import com.example.gameappdev.database.DataApplication
 import com.example.gameappdev.database.PlayerData
-import com.example.gameappdev.database.PlayerDatabase
 import com.example.gameappdev.ui.theme.Caption
 import com.example.gameappdev.ui.theme.ThemeViewModel
-import com.example.gameappdev.ui.theme.backgroundColor
 import com.example.gameappdev.ui.theme.captionColor
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 // contains all the screens
 @Composable
@@ -97,12 +86,17 @@ fun HomeScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { run { navController.navigate("newGame") }
-                    //Ensures only one initial creation of db and api call.
-                    if(callCounter.value == 0)
-                        fetchPlayerStartData(context)
-                        callCounter.value++
-                        Log.d("test", "findwww ${callCounter.value}")
+                onClick = {
+                    run { navController.navigate("newGame") }
+
+                    GlobalScope.launch(Dispatchers.IO) {
+                        //If expCurrency doesn't exist, fetch api and create db.
+                        if (DataApplication(context).database.playerDataDao()
+                                .getPlayerData()[0].expCurrency == null
+                        ) {
+                            fetchPlayerStartData(context)
+                        }
+                    }
                 },
             ) {
                 Icon(
@@ -167,8 +161,17 @@ fun CircleImage(imageSize: Dp) {
     )
 }
 
+
+//@SuppressLint("CoroutineCreationDuringComposition")
+
 @Composable
-fun NewGameScreen(navController: NavController, context: Context, displayCounter: MutableState<Int>) {
+fun NewGameScreen(
+    navController: NavController,
+    context: Context,
+    displayCounter: MutableState<Int>,
+    currentLevel: MutableState<Int>
+) {
+
     Column(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -180,6 +183,14 @@ fun NewGameScreen(navController: NavController, context: Context, displayCounter
             val animatedSizeDp: Dp by animateDpAsState(targetValue = if (isNeedExpansion.value) 350.dp else 100.dp)
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .padding(1.dp)
+                ) {
+                    //Displays the level of the player.
+                    Text("Level: ${currentLevel.value}", fontSize = 28.sp )
+                }
                 CircleImage(animatedSizeDp)
                 Button(
                     onClick = { isNeedExpansion.value = !isNeedExpansion.value }
@@ -191,12 +202,12 @@ fun NewGameScreen(navController: NavController, context: Context, displayCounter
                 }
                 Button(
                     onClick = {
-                        //var db =DataApplication(applicationContext = context)
+
                         //Coroutine in order to access database.
                         //This updates the value of the players expCurrency per click.
                         GlobalScope.launch(Dispatchers.IO) {
                             //var db = DataApplication(applicationContext = context).database
-                            var db = fetchDatabase(context)
+                            var db = DataApplication(context).database
                             var allPlayer = db.playerDataDao().getPlayerData()
                             allPlayer[0].expCurrency ++
                             Log.d("test", "findxxx ${allPlayer[0].expCurrency}")
@@ -215,12 +226,12 @@ fun NewGameScreen(navController: NavController, context: Context, displayCounter
                         .padding(top = 50.dp)
                         .width(300.dp)
                 ) {
-                    Text(
-                        text = displayCounter.value.toString(),
-                        modifier = Modifier.padding(16.dp),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 28.sp
-                    )
+                        Text(
+                            text = displayCounter.value.toString(),
+                            modifier = Modifier.padding(16.dp),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 28.sp
+                        )
                 }
                 Row(modifier = Modifier.padding(25.dp)) {
                     Button(onClick = { navController.navigate("home") }) {

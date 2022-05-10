@@ -10,7 +10,6 @@ import kotlinx.coroutines.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
 //Fetch using Retrofit and the github Json.
 fun fetchPlayerStartData(applicationContext: Context) {
     val url = "https://rziegl2.github.io"
@@ -31,8 +30,7 @@ fun fetchPlayerStartData(applicationContext: Context) {
         //New Instance of the database.
        var db  = DataApplication(applicationContext).database
 
-
-        //Adds starting/continuing values to db.
+        //Adds starting values to db.
         db.playerDataDao().addPlayerData(
             PlayerData(
                 response.id,
@@ -41,18 +39,5 @@ fun fetchPlayerStartData(applicationContext: Context) {
                 response.perClickMultiplier,
                 response.expCurrency
         ))
-
-        val allPlayerData = db.playerDataDao().getPlayerData()
-        d("test", "findxxx ${allPlayerData[0]}")
-        db.close()
-
     }
-}
-
-//Returns a build of the db to make it accessible.
-fun fetchDatabase(applicationContext: Context): PlayerDatabase {
-    return Room.databaseBuilder(
-        applicationContext,
-        PlayerDatabase::class.java, "PlayerDataTable"
-    ).build()
 }
