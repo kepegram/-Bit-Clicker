@@ -364,7 +364,7 @@ fun CreditsScreen(navController: NavController) {
         Text(
             text = "App by:\n Ryley\n Kadin\n William\n Everett",
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colors.primaryVariant,
+            color = MaterialTheme.colors.primary,
             modifier = Modifier.align(Alignment.CenterHorizontally),
             textAlign = TextAlign.Center,
             fontSize = 25.sp
