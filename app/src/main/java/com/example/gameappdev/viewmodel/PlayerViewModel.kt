@@ -11,6 +11,7 @@ import com.example.gameappdev.database.DataApplication
 import com.example.gameappdev.database.PlayerData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
 class PlayerViewModel(context: Application): AndroidViewModel(context) {
@@ -24,26 +25,18 @@ class PlayerViewModel(context: Application): AndroidViewModel(context) {
     var displayCounter: MutableState<Int> = _displayCounter
 
     private val _playerData: MutableState<List<PlayerData>> = mutableStateOf(listOf())
-    val playerData: State<List<PlayerData>> = _playerData
+    val playerData: MutableState<List<PlayerData>> = _playerData
 
     val db = DataApplication(context).database.playerDataDao()
 
-    init {
-
+    fun updateEmpty(){
         GlobalScope.launch(Dispatchers.IO) {
             _playerData.value = db.getPlayerData()
-
-            if (db.getPlayerData().isNotEmpty()){
-                currentLevel.value = db.getPlayerData()[0].level
-                displayCounter.value = db.getPlayerData()[0].expCurrency
-            }
-
-            Log.d("test", "findggg $_levelMilestones")
-            Log.d("test", "findggg $_levelMilestonesIndex")
-
+            playerData.value = _playerData.value
+            Log.d("test", "findggg ${playerData.value}")
         }
-    }
 
+    }
     //Adds playerData to the Db.
     fun addPlayerData(playerData: PlayerData){
         GlobalScope.launch(Dispatchers.IO) {
@@ -59,7 +52,7 @@ class PlayerViewModel(context: Application): AndroidViewModel(context) {
 
     //Returns the players current level.
     fun getCurrentLevel(): Int {
-         return _playerData.value[0].level
+        return _playerData.value[0].level
     }
 
     //Returns the display-counter so its usable in screens.

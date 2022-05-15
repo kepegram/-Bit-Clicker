@@ -42,6 +42,7 @@ import com.example.gameappdev.ui.theme.ThemeViewModel
 import com.example.gameappdev.ui.theme.captionColor
 import com.example.gameappdev.viewmodel.PlayerViewModel
 import kotlinx.coroutines.*
+import okhttp3.internal.wait
 
 // contains all the screens
 @Composable
@@ -79,6 +80,7 @@ fun HomeScreen(
     vm: PlayerViewModel
 )
 {
+    val scope = rememberCoroutineScope()
     Scaffold(
         topBar = {
             TopBar(
@@ -92,19 +94,21 @@ fun HomeScreen(
                 onClick = {
                     run { navController.navigate("newGame") }
 
-                    GlobalScope.launch(Dispatchers.IO) {
+                   val res = GlobalScope.launch(context = Dispatchers.IO) {
                         //If Database doesn't exist, fetch api and create db.
                         if (DataApplication(context).database.playerDataDao()
                                 .getPlayerData().isEmpty()) {
-                            fetchPlayerStartData(context)
+                            fetchPlayerStartData(context,vm)
                         }
                         //If database does exist set the display counter, "fake persist".
                         else{
-                            /*displayCounter =
-                                DataApplication(context).database.playerDataDao()
-                                    .getPlayerData()[0].expCurrency*/
                             vm.displayCounter.value = vm.getCount()
                         }
+                    }
+
+                    runBlocking {
+                        res.join()
+                        vm.updateEmpty()
                     }
                 },
             ) {
@@ -157,6 +161,8 @@ fun HomeScreen(
         }
     }
 }
+
+
 @Composable
 fun CircleImage(imageSize: Dp) {
     Image(
@@ -179,6 +185,7 @@ fun NewGameScreen(
     context: Context,
     vm: PlayerViewModel
 ) {
+    val scope = rememberCoroutineScope()
 
     Column(
             verticalArrangement = Arrangement.Top,
