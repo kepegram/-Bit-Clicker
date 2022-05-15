@@ -165,13 +165,13 @@ fun HomeScreen(
 
 
 @Composable
-fun CircleImage(imageSize: Dp) {
+fun CircleImage(/*imageSize: Dp*/) {
     Image(
         painter = painterResource(R.drawable.logo),
         contentDescription = "Circle Image",
         contentScale = ContentScale.Crop,
         modifier = Modifier
-            .size(imageSize)
+            .size(350.dp)
             .clip(CircleShape)
             .border(5.dp, Color.Gray, CircleShape)
     )
@@ -195,35 +195,30 @@ fun NewGameScreen(
                 .fillMaxSize()
                 .wrapContentSize(Alignment.Center)
         ) {
-            val isNeedExpansion = rememberSaveable{ mutableStateOf(false) }
-            val animatedSizeDp: Dp by animateDpAsState(targetValue = if (isNeedExpansion.value) 350.dp else 100.dp)
-
+            //val isNeedExpansion = rememberSaveable{ mutableStateOf(false) }
+            //val animatedSizeDp: Dp by animateDpAsState(targetValue = if (isNeedExpansion.value) 350.dp else 100.dp)
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .padding(1.dp)
+                    modifier = Modifier.padding(1.dp)
                 ) {
                     //Displays the level of the player.
                     Text("Level: ${vm.getCurrentLevel()}", fontSize = 28.sp )
                 }
-                CircleImage(animatedSizeDp)
-                Button(
-                    onClick = { isNeedExpansion.value = !isNeedExpansion.value }
-                ) {
+                CircleImage()
+                Button(onClick = { }) {
                     Text(
-                        text = "View Image!",
-                        color = Color.Black
+                        text = "CLICK BELOW!",
+                        color = Color.Black,
+                        modifier = Modifier.padding(top = 5.dp)
                     )
                 }
                 Button(
                     onClick = {
-
                         //Coroutine in order to access database.
                         //This updates the value of the players expCurrency per click.
                         GlobalScope.launch(Dispatchers.IO) {
                             //var db = DataApplication(applicationContext = context).database
-
                             vm.incrementCount()
                             //allPlayer[0].expCurrency ++
                             //Log.d("test", "findxxx ${count}")
@@ -236,12 +231,11 @@ fun NewGameScreen(
 
                             //Updating displayCounter to display the correct value.
                             vm.displayCounter.value = vm.playerData.value[0].expCurrency
-
                             vm.dealWithLevel()
                         }
                     },
                     modifier = Modifier
-                        .padding(top = 50.dp)
+                        .padding(top = 20.dp)
                         .width(300.dp)
                 ) {
                         Text(
@@ -390,8 +384,7 @@ fun SettingsScreen(navController: NavController) {
         bottomBar = { BottomNavigationBar(navController) }
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         ) {
             Column(
                 modifier = Modifier.padding(40.dp),
@@ -435,7 +428,7 @@ fun CreditsScreen(navController: NavController) {
             .wrapContentSize(Alignment.Center)
     ) {
         Text(
-            text = "App by:\n Ryley\n Kadin\n William\n Everett",
+            text = "App by:\n Ryley\n Kadin\n William",
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colors.primary,
             modifier = Modifier.align(Alignment.CenterHorizontally),
