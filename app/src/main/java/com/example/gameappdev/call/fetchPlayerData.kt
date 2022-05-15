@@ -29,10 +29,7 @@ suspend fun fetchPlayerStartData(applicationContext: Context, vm: PlayerViewMode
         val response = api.getData()
         d("test", "findfff $response")
 
-        //New Instance of the database.
-       //var db  = DataApplication(applicationContext).database
-
-        //Adds starting values to db.
+        //Adds starting values to db using the vm.
         vm.db.addPlayerData(
             PlayerData(
                 response.id,

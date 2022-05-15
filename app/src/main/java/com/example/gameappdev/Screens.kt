@@ -105,9 +105,10 @@ fun HomeScreen(
                             vm.displayCounter.value = vm.getCount()
                         }
                     }
-
+                    //Wait until Db is loaded.
                     runBlocking {
                         res.join()
+                        //Add values to playerData in vm.
                         vm.updateEmpty()
                     }
                 },
@@ -271,7 +272,7 @@ fun StoreScreen(navController: NavController) {
             TopBar(
                 title = "Store",
                 buttonIcon = Icons.Filled.ArrowBack,
-                onButtonClicked = { navController.navigate("home") }
+                onButtonClicked = { navController.navigate("newGame") }
             )
         },
         bottomBar = { BottomNavigationBar(navController) }
@@ -318,15 +319,22 @@ fun Upgrades() {
                 ) {
                     Spacer(modifier = Modifier.padding(bottom = 50.dp))
                     Row(){
-                        val checkedState = remember { mutableStateOf(false) }
+                        /*val checkedState = remember { mutableStateOf(false) }
                         Checkbox(
                             checked = checkedState.value,
                             onCheckedChange = { checkedState.value = it },
                             colors = CheckboxDefaults.colors(MaterialTheme.colors.primary),
                             modifier = Modifier
                                 .scale(1f)
-                                .padding(top = 0.dp, bottom = 50.dp, end = 50.dp)
-                        )
+                                .padding(top = 0.dp, bottom = 50.dp, end = 50.dp)*/
+                        Button(
+                            onClick = { /*TODO*/ },
+                            modifier = Modifier
+                                .scale(1f)
+                                .padding(top = 0.dp, bottom = 15.dp, end = 50.dp)
+                        ) {
+                            Text("PURCHASE!")
+                        }
                     }
                 }
             }
