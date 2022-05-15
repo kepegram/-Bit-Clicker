@@ -212,7 +212,7 @@ fun NewGameScreen(
                     onClick = { isNeedExpansion.value = !isNeedExpansion.value }
                 ) {
                     Text(
-                        text = "Expand Image!",
+                        text = "View Image!",
                         color = Color.Black
                     )
                 }
@@ -319,21 +319,33 @@ fun Upgrades() {
                 ) {
                     Spacer(modifier = Modifier.padding(bottom = 50.dp))
                     Row(){
-                        /*val checkedState = remember { mutableStateOf(false) }
-                        Checkbox(
-                            checked = checkedState.value,
-                            onCheckedChange = { checkedState.value = it },
-                            colors = CheckboxDefaults.colors(MaterialTheme.colors.primary),
-                            modifier = Modifier
-                                .scale(1f)
-                                .padding(top = 0.dp, bottom = 50.dp, end = 50.dp)*/
+                        val openDialog = remember { mutableStateOf(false) }
                         Button(
-                            onClick = { /*TODO*/ },
+                            onClick = { openDialog.value = true },
                             modifier = Modifier
                                 .scale(1f)
                                 .padding(top = 0.dp, bottom = 15.dp, end = 50.dp)
                         ) {
                             Text("PURCHASE!")
+                        }
+                        if (openDialog.value) {
+                            AlertDialog(
+                                onDismissRequest = { openDialog.value = false },
+                                confirmButton = {
+                                    TextButton(
+                                        onClick = { openDialog.value = false }) {
+                                        Text("Confirm")
+                                    }
+                                },
+                                dismissButton = {
+                                    TextButton(
+                                        onClick = { openDialog.value = false }) {
+                                        Text("Cancel")
+                                    }
+                                },
+                                title = { Text(text = "Please Confirm") },
+                                text = { Text("Are you sure you would like to proceed with this upgrade?") }
+                            )
                         }
                     }
                 }
