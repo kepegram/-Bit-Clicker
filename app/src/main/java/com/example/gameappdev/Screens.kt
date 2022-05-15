@@ -15,6 +15,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -206,10 +207,10 @@ fun NewGameScreen(
                     Text("Level: ${vm.getCurrentLevel()}", fontSize = 28.sp )
                 }
                 CircleImage()
-                Button(onClick = { }) {
+                TextButton(onClick = { }) {
                     Text(
                         text = "CLICK BELOW!",
-                        color = Color.Black,
+                        //color = Color.Black,
                         modifier = Modifier.padding(top = 5.dp)
                     )
                 }
@@ -266,10 +267,10 @@ fun StoreScreen(navController: NavController) {
             TopBar(
                 title = "Store",
                 buttonIcon = Icons.Filled.ArrowBack,
-                onButtonClicked = { navController.navigate("newGame") }
+                onButtonClicked = { navController.navigate("newGame") },
             )
         },
-        bottomBar = { BottomNavigationBar(navController) }
+        //bottomBar = { BottomNavigationBar(navController) }
     ) {
         Column(
             modifier = Modifier.fillMaxSize()) {
@@ -294,8 +295,8 @@ fun StoreScreen(navController: NavController) {
 
 @Composable
 fun Upgrades() {
-    LazyColumn(
-    ) {
+    LazyColumn()
+    {
         items(10) {index ->
             Card(
                 shape = RoundedCornerShape(5.dp),
@@ -307,6 +308,7 @@ fun Upgrades() {
                 Column(
                 ) {
                     Text(text = "Upgrade $index", fontSize = 30.sp, modifier = Modifier.padding(top = 45.dp))
+                    Text(text = "Price $index 00", fontSize = 20.sp, modifier = Modifier.padding(top = 45.dp))
                 }
                 Column(
                     horizontalAlignment = Alignment.End

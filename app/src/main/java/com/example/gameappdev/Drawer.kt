@@ -14,8 +14,8 @@ sealed class DrawerScreens(val title: String, val route: String) {
 }
 
 private val screens = listOf(
-    DrawerScreens.Credits,
-    DrawerScreens.Store
+    //DrawerScreens.Store,
+    DrawerScreens.Credits
 )
 
 @Composable
