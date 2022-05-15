@@ -1,6 +1,6 @@
 # Bit Clicker
 
-Bit Clicker is an application that relieves stress during a Comp Sci students stressful life.
+Bit Clicker is an application that relieves stress during a Comp Sci students stressful life. Simply start a new game is click forever!
 
 ## Installation
 
