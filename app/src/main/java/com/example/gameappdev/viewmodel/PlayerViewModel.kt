@@ -29,8 +29,22 @@ class PlayerViewModel(context: Application): AndroidViewModel(context) {
 
     val db = DataApplication(context).database.playerDataDao()
 
+    init {
+
+        viewModelScope.launch(Dispatchers.IO) {
+            if (db.getPlayerData().isNotEmpty()){
+                currentLevel.value = db.getPlayerData()[0].level
+                displayCounter.value = db.getPlayerData()[0].expCurrency
+            }
+
+            Log.d("test", "findggg $_levelMilestones")
+            Log.d("test", "findggg $_levelMilestonesIndex")
+
+        }
+    }
+
     fun updateEmpty(){
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             _playerData.value = db.getPlayerData()
             playerData.value = _playerData.value
             Log.d("test", "findggg ${playerData.value}")
@@ -39,7 +53,7 @@ class PlayerViewModel(context: Application): AndroidViewModel(context) {
     }
     //Adds playerData to the Db.
     fun addPlayerData(playerData: PlayerData){
-        GlobalScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             db.addPlayerData(playerData)
             _playerData.value = db.getPlayerData()
         }
