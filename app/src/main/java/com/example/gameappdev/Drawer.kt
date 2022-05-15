@@ -10,10 +10,12 @@ import androidx.compose.ui.unit.dp
 
 sealed class DrawerScreens(val title: String, val route: String) {
     object Credits : DrawerScreens("View Credits", "credits")
+    object Store : DrawerScreens("Store","Store")
 }
 
 private val screens = listOf(
-    DrawerScreens.Credits
+    DrawerScreens.Credits,
+    DrawerScreens.Store
 )
 
 @Composable

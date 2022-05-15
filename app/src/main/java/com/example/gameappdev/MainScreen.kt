@@ -60,6 +60,9 @@ fun AppMainScreen(
                 composable(DrawerScreens.Credits.route) {
                     CreditsScreen(navController = navController)
                 }
+                composable(DrawerScreens.Store.route) {
+                    StoreScreen(navController = navController)
+                }
             }
         }
     }

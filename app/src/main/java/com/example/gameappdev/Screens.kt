@@ -7,8 +7,10 @@ import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -246,17 +248,21 @@ fun NewGameScreen(
                         Text(text = "Return Home", color = Color.Black)
                     }
                 }
+                Row(modifier = Modifier.padding(3.dp)) {
+                    Button(onClick = { navController.navigate("Store") }) {
+                        Text(text = "Purchase Upgrades", color = Color.Black)
+                    }
+                }
             }
         }
     }
 
-/*
 @Composable
 fun StoreScreen(navController: NavController) {
     Scaffold(
         topBar = {
             TopBar(
-                title = "Infinite Clicker",
+                title = "Store",
                 buttonIcon = Icons.Filled.ArrowBack,
                 onButtonClicked = { navController.navigate("home") }
             )
@@ -264,22 +270,62 @@ fun StoreScreen(navController: NavController) {
         bottomBar = { BottomNavigationBar(navController) }
     ) {
         Column(
+            modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally)
+            {
+                Upgrades()
+            }
+        }
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .wrapContentSize(Alignment.Center)
+                .padding(20.dp),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.End
         ) {
-            Text(
-                text = "Store View",
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colors.primaryVariant,
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                textAlign = TextAlign.Center,
-                fontSize = 25.sp
-            )
         }
     }
 }
-*/
+
+@Composable
+fun Upgrades() {
+    LazyColumn(
+    ) {
+        items(10) {index ->
+            Card(
+                shape = RoundedCornerShape(5.dp),
+                elevation = 10.dp,
+                modifier = Modifier
+                    .padding(start = 16.dp, end = 16.dp, top = 5.dp, bottom = 5.dp)
+                    .fillMaxWidth()
+            ) {
+                Column(
+                ) {
+                    Text(text = "Upgrade $index", fontSize = 30.sp, modifier = Modifier.padding(top = 45.dp))
+                }
+                Column(
+                    horizontalAlignment = Alignment.End
+                ) {
+                    Spacer(modifier = Modifier.padding(bottom = 50.dp))
+                    Row(){
+                        val checkedState = remember { mutableStateOf(false) }
+                        Checkbox(
+                            checked = checkedState.value,
+                            onCheckedChange = { checkedState.value = it },
+                            colors = CheckboxDefaults.colors(MaterialTheme.colors.primary),
+                            modifier = Modifier
+                                .scale(1f)
+                                .padding(top = 0.dp, bottom = 50.dp, end = 50.dp)
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
 
 @Composable
 fun SettingsScreen(navController: NavController) {
