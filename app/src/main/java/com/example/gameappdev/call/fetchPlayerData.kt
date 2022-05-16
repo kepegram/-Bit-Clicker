@@ -12,6 +12,7 @@ import com.example.gameappdev.viewmodel.PlayerViewModel
 import kotlinx.coroutines.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.Exception
 
 //Fetch using Retrofit and the github Json.
 suspend fun fetchPlayerStartData(applicationContext: Context, vm: PlayerViewModel) {
@@ -25,7 +26,9 @@ suspend fun fetchPlayerStartData(applicationContext: Context, vm: PlayerViewMode
         .create(RetroData::class.java)
 
     //Makes a new call to the rest api.
-        //Gets data from the api call.
+    //Gets data from the api call.
+    //Try catch in case of wifi not connected.
+    try {
         val response = api.getData()
         d("test", "findfff $response")
 
@@ -37,6 +40,22 @@ suspend fun fetchPlayerStartData(applicationContext: Context, vm: PlayerViewMode
                 response.baseClickValue,
                 response.perClickMultiplier,
                 response.expCurrency
-        ))
+            ))
+    }catch (E: Exception){
+        //Same data as Api Holds.
+        val response = PlayerData(0,1,1,1,0)
+
+        //Adds starting values to db using the vm.
+        vm.db.addPlayerData(
+            PlayerData(
+                response.id,
+                response.level,
+                response.baseClickValue,
+                response.perClickMultiplier,
+                response.expCurrency
+            ))
+    }
+
+
 
 }
