@@ -300,7 +300,7 @@ fun Upgrades(vm: PlayerViewModel) {
                     .padding(start = 15.dp, end = 15.dp, top = 25.dp, bottom = 25.dp)
                     .fillMaxWidth()
             ) {
-                Column(
+                Column(horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     if (index == 0) {
                         Text(
@@ -315,26 +315,29 @@ fun Upgrades(vm: PlayerViewModel) {
                         )
                     }
                     else{
-                        Text(text = "Upgrade Multiplier",
-                            fontSize = 30.sp,
-                            modifier = Modifier.padding(top = 25.dp, start = 5.dp))
-                        Text(text = "Price ${vm.getMultiUpgradePrice()}",
-                            fontSize = 20.sp,
-                            modifier = Modifier.padding(top = 45.dp, start = 5.dp))
+                            Text(
+                                text = "Upgrade Multiplier",
+                                fontSize = 30.sp,
+                                modifier = Modifier.padding(top = 25.dp, start = 5.dp)
+                            )
+                            Text(
+                                text = "Price ${vm.getMultiUpgradePrice()}",
+                                fontSize = 20.sp,
+                                modifier = Modifier.padding(top = 45.dp, start = 5.dp)
+                            )
                     }
 
                 }
-                Column(
-                    horizontalAlignment = Alignment.End
-                ) {
                     Spacer(modifier = Modifier.padding(bottom = 50.dp))
-                    Row(){
+
                         val openDialog = remember { mutableStateOf(false) }
                         Button(
                             onClick = { openDialog.value = true },
                             modifier = Modifier
                                 .scale(1f)
-                                .padding(top = 75.dp, bottom = 10.dp, end = 5.dp)
+                                .padding(top = 65.dp, bottom = 10.dp, end = 5.dp),
+                            enabled = vm.checkAmount()
+
                         ) {
                             Text("PURCHASE!")
                         }
@@ -361,8 +364,8 @@ fun Upgrades(vm: PlayerViewModel) {
                                 title = { Text(text = "Please Confirm") },
                                 text = { Text("Are you sure you would like to proceed with this upgrade?") }
                             )
-                        }
-                    }
+
+
                 }
             }
         }

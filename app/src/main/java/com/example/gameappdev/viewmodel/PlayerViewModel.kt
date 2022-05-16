@@ -33,6 +33,8 @@ class PlayerViewModel(context: Application): AndroidViewModel(context) {
     private val _playerData: MutableState<List<PlayerData>> = mutableStateOf(listOf())
     val playerData: MutableState<List<PlayerData>> = _playerData
 
+    val currencyState: MutableState<Boolean> = mutableStateOf(false)
+
     val db = DataApplication(context).database.playerDataDao()
 
     init {
@@ -155,6 +157,10 @@ class PlayerViewModel(context: Application): AndroidViewModel(context) {
             _multiMilestonesIndex.value++
         }
 
+    }
+
+    fun checkAmount():Boolean{
+        return _playerData.value[0].expCurrency > _multiMilestones.value[_multiMilestonesIndex.value]
     }
 
 }
