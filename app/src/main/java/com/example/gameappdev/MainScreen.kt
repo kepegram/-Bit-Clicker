@@ -15,7 +15,6 @@ fun AppMainScreen(
     viewModel: PlayerViewModel
 ) {
     val navController = rememberNavController()
-
     Surface(color = MaterialTheme.colors.background) {
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val scope = rememberCoroutineScope()

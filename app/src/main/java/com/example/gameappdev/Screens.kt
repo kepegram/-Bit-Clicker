@@ -39,6 +39,7 @@ import com.example.gameappdev.call.fetchPlayerStartData
 import com.example.gameappdev.database.DataApplication
 import com.example.gameappdev.database.PlayerData
 import com.example.gameappdev.ui.theme.Caption
+import com.example.gameappdev.ui.theme.MatrixRain
 import com.example.gameappdev.ui.theme.ThemeViewModel
 import com.example.gameappdev.ui.theme.captionColor
 import com.example.gameappdev.viewmodel.PlayerViewModel
@@ -164,7 +165,6 @@ fun HomeScreen(
     }
 }
 
-
 @Composable
 fun CircleImage(/*imageSize: Dp*/) {
     Image(
@@ -178,7 +178,6 @@ fun CircleImage(/*imageSize: Dp*/) {
     )
 }
 
-
 //@SuppressLint("CoroutineCreationDuringComposition")
 
 @Composable
@@ -187,8 +186,8 @@ fun NewGameScreen(
     context: Context,
     vm: PlayerViewModel
 ) {
+    MatrixRain()
     val scope = rememberCoroutineScope()
-
     Column(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -210,7 +209,7 @@ fun NewGameScreen(
                 TextButton(onClick = { }) {
                     Text(
                         text = "CLICK BELOW!",
-                        //color = Color.Black,
+                        color = Color.White,
                         modifier = Modifier.padding(top = 5.dp)
                     )
                 }
@@ -439,6 +438,7 @@ fun SettingsScreen(navController: NavController) {
 
 @Composable
 fun CreditsScreen(navController: NavController) {
+    MatrixRain()
     TopBar(
         title = "Credits",
         buttonIcon = Icons.Filled.ArrowBack,
