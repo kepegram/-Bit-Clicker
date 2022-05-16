@@ -159,8 +159,20 @@ class PlayerViewModel(context: Application): AndroidViewModel(context) {
 
     }
 
-    fun checkAmount():Boolean{
-        return _playerData.value[0].expCurrency > _multiMilestones.value[_multiMilestonesIndex.value]
+    fun checkBaseAmount():Boolean{
+        Log.d("test", "findyyy ${_playerData.value[0].expCurrency}")
+        Log.d("test", "findyyy ${_multiMilestones.value[_multiMilestonesIndex.value]}")
+
+
+        return _playerData.value[0].expCurrency >= _baseClickMilestones.value[_baseClickMilestonesIndex.value]
+    }
+
+    fun checkMultiAmount():Boolean{
+        Log.d("test", "findyyy ${_playerData.value[0].expCurrency}")
+        Log.d("test", "findyyy ${_multiMilestones.value[_multiMilestonesIndex.value]}")
+
+
+        return _playerData.value[0].expCurrency >= _multiMilestones.value[_multiMilestonesIndex.value]
     }
 
 }

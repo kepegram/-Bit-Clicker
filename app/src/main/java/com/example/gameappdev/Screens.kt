@@ -290,6 +290,7 @@ fun StoreScreen(navController: NavController, vm: PlayerViewModel) {
 
 @Composable
 fun Upgrades(vm: PlayerViewModel) {
+    val idx = 0
     LazyColumn()
     {
         items(2) {index ->
@@ -336,7 +337,7 @@ fun Upgrades(vm: PlayerViewModel) {
                             modifier = Modifier
                                 .scale(1f)
                                 .padding(top = 65.dp, bottom = 10.dp, end = 5.dp),
-                            enabled = vm.checkAmount()
+                            enabled = (index == 0 && vm.checkBaseAmount()) || (index == 1 && vm.checkMultiAmount())
 
                         ) {
                             Text("PURCHASE!")
@@ -371,6 +372,7 @@ fun Upgrades(vm: PlayerViewModel) {
         }
     }
 }
+
 
 @Composable
 fun SettingsScreen(navController: NavController) {
