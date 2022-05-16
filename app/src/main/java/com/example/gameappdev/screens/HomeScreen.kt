@@ -43,6 +43,10 @@ fun HomeScreen(
     vm: PlayerViewModel
 )
 {
+    //Allows for intent retrieval from vm.
+    val intent = vm.dealWithIntent()
+    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+
     Scaffold(
         topBar = {
             TopBar(
@@ -124,8 +128,7 @@ fun HomeScreen(
         }
         ExtendedFloatingActionButton(
             text = { showText() },
-            onClick = { vm.shareIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                startActivity(context,vm.shareIntent, Bundle.EMPTY)
+            onClick = { startActivity(context,intent, Bundle.EMPTY)
             },
             shape = Shapes.small,
             modifier = Modifier.padding(start = 103.dp)

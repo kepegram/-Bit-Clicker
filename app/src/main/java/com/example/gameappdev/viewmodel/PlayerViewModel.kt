@@ -4,19 +4,13 @@ import android.app.Application
 import android.content.Intent
 import android.util.Log
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.core.view.ContentInfoCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gameappdev.database.DataApplication
 import com.example.gameappdev.database.PlayerData
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
-import okhttp3.internal.wait
-import kotlin.reflect.jvm.internal.impl.metadata.deserialization.Flags
 
 class PlayerViewModel(context: Application): AndroidViewModel(context) {
     private var _levelMilestonesIndex:MutableState<Int> = mutableStateOf(0)
@@ -38,13 +32,6 @@ class PlayerViewModel(context: Application): AndroidViewModel(context) {
     val playerData: MutableState<List<PlayerData>> = _playerData
 
     val db = DataApplication(context).database.playerDataDao()
-
-    private val sendIntent: Intent = Intent().apply {
-        action = Intent.ACTION_SEND
-        putExtra(Intent.EXTRA_TEXT, "Try to beat my level on this new bit clicker game! Download Here: https://download.bitclicker.io")
-        type = "text/plain"
-    }
-    val shareIntent: Intent = Intent.createChooser(sendIntent, null)
 
 
 
@@ -182,6 +169,20 @@ class PlayerViewModel(context: Application): AndroidViewModel(context) {
     //Used by Upgrade() to check if enough exp to buy multi upgrade.
     fun checkMultiAmount():Boolean{
         return _playerData.value[0].expCurrency >= _multiMilestones.value[_multiMilestonesIndex.value]
+    }
+
+    fun dealWithIntent(): Intent {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(
+                Intent.EXTRA_TEXT,
+                "Try to beat my level on this new bit clicker game! Download Here: https://download.bitclicker.io"
+            )
+            type = "text/plain"
+        }
+
+        return Intent.createChooser(sendIntent, null)
+
     }
 
 }
