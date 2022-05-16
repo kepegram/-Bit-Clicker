@@ -1,4 +1,4 @@
-package com.example.gameappdev
+package com.example.gameappdev.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*

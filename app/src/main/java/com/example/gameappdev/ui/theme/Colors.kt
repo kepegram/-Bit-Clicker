@@ -6,7 +6,6 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-val Red = Color.fromRGB("#FF7C74")
 val DarkBlue = Color.fromRGB("#0B1729")
 val Silver20 = Color.fromRGB("#E5E5E5")
 val SilverLight = Color.fromRGB("#F8F7F8")

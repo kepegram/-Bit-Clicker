@@ -6,6 +6,10 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.gameappdev.navigation.Drawer
+import com.example.gameappdev.navigation.DrawerScreens
+import com.example.gameappdev.navigation.NavigationItem
+import com.example.gameappdev.screens.*
 import com.example.gameappdev.viewmodel.PlayerViewModel
 import kotlinx.coroutines.launch
 

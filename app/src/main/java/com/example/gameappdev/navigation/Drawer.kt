@@ -1,4 +1,4 @@
-package com.example.gameappdev
+package com.example.gameappdev.navigation
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -8,15 +8,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
+// Class defining drawer screen routes
+
 sealed class DrawerScreens(val title: String, val route: String) {
     object Credits : DrawerScreens("View Credits", "credits")
     object Store : DrawerScreens("Store","Store")
 }
 
+// What routes will display in the drawer
+
 private val screens = listOf(
-    //DrawerScreens.Store,
     DrawerScreens.Credits
 )
+
+// Drawer dimensions
 
 @Composable
 fun Drawer(

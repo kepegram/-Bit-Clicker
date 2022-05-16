@@ -20,6 +20,8 @@ import androidx.compose.ui.unit.TextUnit
 import kotlinx.coroutines.delay
 import kotlin.random.Random
 
+// Composable used to create each matrix strip and determine its time and length
+
 @Composable
 fun MatrixRain(stripCount: Int = 20) {
     Row {
@@ -31,6 +33,8 @@ fun MatrixRain(stripCount: Int = 20) {
         }
     }
 }
+
+// Confines each rain string to be on screen & defines how many characters to be in each strip
 
 @Composable
 fun RowScope.MatrixColumn(crawlSpeed: Long, yStartDelay: Long) {
@@ -76,6 +80,8 @@ fun RowScope.MatrixColumn(crawlSpeed: Long, yStartDelay: Long) {
         }
     }
 }
+
+// Creates each matrix strip's characters
 
 @Composable
 fun MatrixChar(

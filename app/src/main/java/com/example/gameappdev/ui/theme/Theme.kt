@@ -6,6 +6,8 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 
+// Dark theme
+
 private val DarkColorPalette = darkColors(
     primary = MistyColor,
     primaryVariant = MistyColor,
@@ -13,21 +15,16 @@ private val DarkColorPalette = darkColors(
     background = YellowyColor
 )
 
+// Light theme
+
 private val LightColorPalette = lightColors(
     primary = YellowyColor,
     primaryVariant = YellowyColor,
     secondary = MistyColor,
     background = MistyColor
-
-    /* Other default colors to override
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
-    */
 )
+
+// Old app theme composable not needed (keeping just in case)
 
 @Composable
 fun GameAppDevTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {

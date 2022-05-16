@@ -1,4 +1,4 @@
-package com.example.gameappdev
+package com.example.gameappdev.navigation
 
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -24,7 +24,6 @@ fun TopBar(
             IconButton(onClick = { onButtonClicked() } ) {
                 Icon(buttonIcon, contentDescription = "")
             }
-        },
-        //backgroundColor = MaterialTheme.colors.primary
+        }
     )
 }

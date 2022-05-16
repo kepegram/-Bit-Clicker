@@ -8,6 +8,9 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
 import com.example.gameappdev.dataStore
 
+// New app theme composable that determines if the app is in light or dark mode
+// and displays the theme accordingly
+
 @Composable
 fun AppTheme(
     content: @Composable () -> Unit,

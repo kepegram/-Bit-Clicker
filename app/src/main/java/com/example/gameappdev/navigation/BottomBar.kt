@@ -1,4 +1,4 @@
-package com.example.gameappdev
+package com.example.gameappdev.navigation
 
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -19,7 +19,6 @@ fun BottomNavigationBar(navController: NavController) {
         NavigationItem.Settings
     )
     BottomNavigation(
-        //backgroundColor = MaterialTheme.colors.primary,
         contentColor = Color.White
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()

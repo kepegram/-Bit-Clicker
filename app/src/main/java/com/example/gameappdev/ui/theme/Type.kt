@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.sp
 import com.example.gameappdev.R
 
 private val DMSans = FontFamily(
+    //Regular
     Font(R.font.dmsans_regular, FontWeight.Normal),
     Font(R.font.dmsans_medium, FontWeight.Medium),
     Font(R.font.dmsans_bold, FontWeight.Bold),
@@ -63,9 +64,6 @@ val AppTypography = Typography(
     overline = Fonts.Caption
 )
 
-
-
-
 // Set of Material typography styles to start with
 val Typography = Typography(
     body1 = TextStyle(
@@ -73,16 +71,4 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp
     )
-    /* Other default text styles to override
-    button = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.W500,
-        fontSize = 14.sp
-    ),
-    caption = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 12.sp
-    )
-    */
 )
