@@ -80,6 +80,11 @@ fun Upgrades(vm: PlayerViewModel, navController: NavController) {
                             fontSize = 20.sp,
                             modifier = Modifier.padding(top = 45.dp, start = 5.dp)
                         )
+                        Text(
+                            text = "Price ${vm.getBaseClickUpgradePrice()}",
+                            fontSize = 10.sp,
+                            modifier = Modifier.padding(top = 5.dp, start = 5.dp)
+                        )
                     }
                     else{
                         Text(
@@ -91,6 +96,11 @@ fun Upgrades(vm: PlayerViewModel, navController: NavController) {
                             text = "Price ${vm.getMultiUpgradePrice().toString(radix = 2)}",
                             fontSize = 20.sp,
                             modifier = Modifier.padding(top = 45.dp, start = 5.dp)
+                        )
+                        Text(
+                            text = "Price ${vm.getMultiUpgradePrice()}",
+                            fontSize = 10.sp,
+                            modifier = Modifier.padding(top = 5.dp, start = 5.dp)
                         )
                     }
 

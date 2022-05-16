@@ -100,6 +100,12 @@ fun NewGameScreen(
                     fontSize = 28.sp
                 )
             }
+            Text(
+                text = vm.displayCounter.value.toString(),
+                modifier = Modifier.padding(top = 0.dp, end = 0.dp),
+                fontWeight = FontWeight.Bold,
+                fontSize = 14.sp
+            )
             Row(modifier = Modifier.padding(25.dp)) {
                 Button(onClick = { navController.navigate("Store") }) {
                     Text(text = "Purchase Upgrades", color = Color.Black)
