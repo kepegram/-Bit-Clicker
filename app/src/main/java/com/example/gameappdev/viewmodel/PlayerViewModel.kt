@@ -104,12 +104,14 @@ class PlayerViewModel(context: Application): AndroidViewModel(context) {
     }
 
     fun getBaseClickUpgradePrice():Int{
+        _baseClickMilestonesIndex.value = _playerData.value[0].baseClickValue-1
         return _baseClickMilestones.value[_baseClickMilestonesIndex.value]
     }
 
     fun dealWithBaseClickUpgrade(){
         viewModelScope.launch(Dispatchers.IO) {
             _playerData.value = db.getPlayerData()
+            _baseClickMilestonesIndex.value = _playerData.value[0].baseClickValue-1
 
             _playerData.value[0].baseClickValue++
             _playerData.value[0].expCurrency -= _baseClickMilestones.value[_baseClickMilestonesIndex.value]
@@ -129,12 +131,14 @@ class PlayerViewModel(context: Application): AndroidViewModel(context) {
     }
 
     fun getMultiUpgradePrice():Int{
+        _multiMilestonesIndex.value = _playerData.value[0].perClickMultiplier-1
         return _multiMilestones.value[_multiMilestonesIndex.value]
     }
 
     fun dealWithMultiUpgrade(){
         viewModelScope.launch(Dispatchers.IO) {
             _playerData.value = db.getPlayerData()
+            _multiMilestonesIndex.value = _playerData.value[0].perClickMultiplier-1
 
             _playerData.value[0].perClickMultiplier++
             _playerData.value[0].expCurrency -= _multiMilestones.value[_multiMilestonesIndex.value]
