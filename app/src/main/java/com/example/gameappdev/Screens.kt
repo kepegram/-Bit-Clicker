@@ -261,7 +261,7 @@ fun NewGameScreen(
     }
 
 @Composable
-fun StoreScreen(navController: NavController) {
+fun StoreScreen(navController: NavController, vm: PlayerViewModel) {
     Scaffold(
         topBar = {
             TopBar(
@@ -279,7 +279,7 @@ fun StoreScreen(navController: NavController) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally)
             {
-                Upgrades()
+                Upgrades(vm)
             }
         }
         Column(
@@ -294,10 +294,10 @@ fun StoreScreen(navController: NavController) {
 }
 
 @Composable
-fun Upgrades() {
+fun Upgrades(vm: PlayerViewModel) {
     LazyColumn()
     {
-        items(10) {index ->
+        items(2) {index ->
             Card(
                 shape = RoundedCornerShape(5.dp),
                 elevation = 10.dp,
@@ -307,8 +307,23 @@ fun Upgrades() {
             ) {
                 Column(
                 ) {
-                    Text(text = "Upgrade $index", fontSize = 30.sp, modifier = Modifier.padding(top = 45.dp))
-                    Text(text = "Price $index 00", fontSize = 20.sp, modifier = Modifier.padding(top = 45.dp))
+                    if (index == 0) {
+                        Text(
+                            text = "Upgrade BaseClick Value",
+                            fontSize = 30.sp,
+                            modifier = Modifier.padding(top = 45.dp)
+                        )
+                        Text(
+                            text = "Price ${vm.getBaseClickUpgradePrice()}",
+                            fontSize = 20.sp,
+                            modifier = Modifier.padding(top = 45.dp)
+                        )
+                    }
+                    else{
+                        Text(text = "Upgrade Multiplier", fontSize = 30.sp, modifier = Modifier.padding(top = 45.dp))
+                        Text(text = "Price ${vm.getMultiUpgradePrice()}", fontSize = 20.sp, modifier = Modifier.padding(top = 45.dp))
+                    }
+
                 }
                 Column(
                     horizontalAlignment = Alignment.End
@@ -329,7 +344,12 @@ fun Upgrades() {
                                 onDismissRequest = { openDialog.value = false },
                                 confirmButton = {
                                     TextButton(
-                                        onClick = { openDialog.value = false }) {
+                                        onClick = { openDialog.value = false
+                                            if (index == 0)
+                                                vm.dealWithBaseClickUpgrade()
+                                            else
+                                                vm.dealWithMultiUpgrade()
+                                        }) {
                                         Text("Confirm")
                                     }
                                 },

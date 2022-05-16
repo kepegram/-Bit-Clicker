@@ -18,6 +18,12 @@ class PlayerViewModel(context: Application): AndroidViewModel(context) {
     private var _levelMilestonesIndex:MutableState<Int> = mutableStateOf(0)
     private val _levelMilestones: MutableState<List<Int>> = mutableStateOf(listOf(50,100,200,400,800,1600,3200,6400,1))
 
+    private var _baseClickMilestonesIndex:MutableState<Int> = mutableStateOf(0)
+    private val _baseClickMilestones: MutableState<List<Int>> = mutableStateOf(listOf(100,200,400,800,1600,3200,6400,12800,1))
+
+    private var _multiMilestonesIndex:MutableState<Int> = mutableStateOf(0)
+    private val _multiMilestones: MutableState<List<Int>> = mutableStateOf(listOf(200,400,800,1600,3200,6400,12800,25600,1))
+
     private val _currentLevel: MutableState<Int> = mutableStateOf(0)
     var currentLevel: MutableState<Int> = _currentLevel
 
@@ -61,7 +67,7 @@ class PlayerViewModel(context: Application): AndroidViewModel(context) {
 
     //Increments the expCurrency.
     fun incrementCount() {
-        _playerData.value[0].expCurrency++
+        _playerData.value[0].expCurrency = _playerData.value[0].expCurrency + (_playerData.value[0].baseClickValue * _playerData.value[0].perClickMultiplier)
     }
 
     //Returns the players current level.
@@ -95,6 +101,56 @@ class PlayerViewModel(context: Application): AndroidViewModel(context) {
 
             _levelMilestonesIndex.value++
         }
+    }
+
+    fun getBaseClickUpgradePrice():Int{
+        return _baseClickMilestones.value[_baseClickMilestonesIndex.value]
+    }
+
+    fun dealWithBaseClickUpgrade(){
+        viewModelScope.launch(Dispatchers.IO) {
+            _playerData.value = db.getPlayerData()
+
+            _playerData.value[0].baseClickValue++
+            _playerData.value[0].expCurrency -= _baseClickMilestones.value[_baseClickMilestonesIndex.value]
+            addPlayerData(
+                PlayerData(
+                    _playerData.value[0].id,
+                    _playerData.value[0].level,
+                    _playerData.value[0].baseClickValue,
+                    _playerData.value[0].perClickMultiplier,
+                    _playerData.value[0].expCurrency
+                )
+            )
+
+            _baseClickMilestonesIndex.value++
+        }
+
+    }
+
+    fun getMultiUpgradePrice():Int{
+        return _multiMilestones.value[_multiMilestonesIndex.value]
+    }
+
+    fun dealWithMultiUpgrade(){
+        viewModelScope.launch(Dispatchers.IO) {
+            _playerData.value = db.getPlayerData()
+
+            _playerData.value[0].perClickMultiplier++
+            _playerData.value[0].expCurrency -= _multiMilestones.value[_multiMilestonesIndex.value]
+            addPlayerData(
+                PlayerData(
+                    _playerData.value[0].id,
+                    _playerData.value[0].level,
+                    _playerData.value[0].baseClickValue,
+                    _playerData.value[0].perClickMultiplier,
+                    _playerData.value[0].expCurrency
+                )
+            )
+
+            _multiMilestonesIndex.value++
+        }
+
     }
 
 }

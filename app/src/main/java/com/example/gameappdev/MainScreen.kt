@@ -61,7 +61,7 @@ fun AppMainScreen(
                     CreditsScreen(navController = navController)
                 }
                 composable(DrawerScreens.Store.route) {
-                    StoreScreen(navController = navController)
+                    StoreScreen(navController = navController, viewModel)
                 }
             }
         }
