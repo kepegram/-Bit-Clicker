@@ -165,12 +165,9 @@ fun HomeScreen(
     }
 }
 
-//@SuppressLint("CoroutineCreationDuringComposition")
-
 @Composable
 fun NewGameScreen(
     navController: NavController,
-    context: Context,
     vm: PlayerViewModel
 ) {
     MatrixRain()
@@ -348,6 +345,7 @@ fun Upgrades(vm: PlayerViewModel) {
                                 confirmButton = {
                                     TextButton(
                                         onClick = { openDialog.value = false
+                                            //Deals with upgrade onConfirm click.
                                             if (index == 0)
                                                 vm.dealWithBaseClickUpgrade()
                                             else
@@ -372,7 +370,6 @@ fun Upgrades(vm: PlayerViewModel) {
         }
     }
 }
-
 
 @Composable
 fun SettingsScreen(navController: NavController) {

@@ -42,7 +42,7 @@ suspend fun fetchPlayerStartData(applicationContext: Context, vm: PlayerViewMode
                 response.expCurrency
             ))
     }catch (E: Exception){
-        //Same data as Api Holds.
+        //Hardcoded/Same data as Api Holds.
         val response = PlayerData(0,1,1,1,0)
 
         //Adds starting values to db using the vm.

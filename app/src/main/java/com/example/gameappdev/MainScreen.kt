@@ -54,7 +54,7 @@ fun AppMainScreen(
                     SettingsScreen(navController = navController)
                 }
                 composable(NavigationItem.NewGame.route) {
-                    NewGameScreen(navController = navController, context = context, viewModel)
+                    NewGameScreen(navController = navController, viewModel)
                 }
                 composable(DrawerScreens.Credits.route) {
                     CreditsScreen(navController = navController)

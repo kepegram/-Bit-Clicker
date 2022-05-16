@@ -33,24 +33,19 @@ class PlayerViewModel(context: Application): AndroidViewModel(context) {
     private val _playerData: MutableState<List<PlayerData>> = mutableStateOf(listOf())
     val playerData: MutableState<List<PlayerData>> = _playerData
 
-    val currencyState: MutableState<Boolean> = mutableStateOf(false)
-
     val db = DataApplication(context).database.playerDataDao()
 
+    //Grabs currentLevel and displayCounter for newGameScreen()
     init {
-
         viewModelScope.launch(Dispatchers.IO) {
             if (db.getPlayerData().isNotEmpty()){
                 currentLevel.value = db.getPlayerData()[0].level
                 displayCounter.value = db.getPlayerData()[0].expCurrency
             }
-
-            Log.d("test", "findggg $_levelMilestones")
-            Log.d("test", "findggg $_levelMilestonesIndex")
-
         }
     }
 
+    //Ensures data in _playerData.
     fun updateEmpty(){
         viewModelScope.launch(Dispatchers.IO) {
             _playerData.value = db.getPlayerData()
@@ -59,6 +54,7 @@ class PlayerViewModel(context: Application): AndroidViewModel(context) {
         }
 
     }
+
     //Adds playerData to the Db.
     fun addPlayerData(playerData: PlayerData){
         viewModelScope.launch(Dispatchers.IO) {
@@ -87,9 +83,6 @@ class PlayerViewModel(context: Application): AndroidViewModel(context) {
         _playerData.value = db.getPlayerData()
         _levelMilestonesIndex.value = _playerData.value[0].level-1
 
-        Log.d("test", "findggg $_levelMilestonesIndex")
-        Log.d("test", "findggg ${_levelMilestones.value[_levelMilestonesIndex.value]}")
-
         if (_playerData.value[0].expCurrency == _levelMilestones.value[_levelMilestonesIndex.value]){
             _playerData.value[0].level++
             addPlayerData(
@@ -110,6 +103,9 @@ class PlayerViewModel(context: Application): AndroidViewModel(context) {
         return _baseClickMilestones.value[_baseClickMilestonesIndex.value]
     }
 
+    //Adds 1 to baseClick Multi when upgrade button is clicked.
+    //Subtracts the amount of the upgrade.
+    //Adds values baseClickValue to DB.
     fun dealWithBaseClickUpgrade(){
         viewModelScope.launch(Dispatchers.IO) {
             _playerData.value = db.getPlayerData()
@@ -117,6 +113,7 @@ class PlayerViewModel(context: Application): AndroidViewModel(context) {
 
             _playerData.value[0].baseClickValue++
             _playerData.value[0].expCurrency -= _baseClickMilestones.value[_baseClickMilestonesIndex.value]
+            displayCounter.value = _playerData.value[0].expCurrency
             addPlayerData(
                 PlayerData(
                     _playerData.value[0].id,
@@ -132,11 +129,15 @@ class PlayerViewModel(context: Application): AndroidViewModel(context) {
 
     }
 
+    //Returns the current multi upgrade price.
     fun getMultiUpgradePrice():Int{
         _multiMilestonesIndex.value = _playerData.value[0].perClickMultiplier-1
         return _multiMilestones.value[_multiMilestonesIndex.value]
     }
 
+    //Adds 1 to perClickMulti when upgrade button is clicked.
+    //Subtracts the amount of the upgrade.
+    //Adds values perClickMulti to DB.
     fun dealWithMultiUpgrade(){
         viewModelScope.launch(Dispatchers.IO) {
             _playerData.value = db.getPlayerData()
@@ -144,6 +145,7 @@ class PlayerViewModel(context: Application): AndroidViewModel(context) {
 
             _playerData.value[0].perClickMultiplier++
             _playerData.value[0].expCurrency -= _multiMilestones.value[_multiMilestonesIndex.value]
+            displayCounter.value = _playerData.value[0].expCurrency
             addPlayerData(
                 PlayerData(
                     _playerData.value[0].id,
@@ -159,19 +161,13 @@ class PlayerViewModel(context: Application): AndroidViewModel(context) {
 
     }
 
+    //Used by Upgrade() to check if enough exp to buy baseClick upgrade.
     fun checkBaseAmount():Boolean{
-        Log.d("test", "findyyy ${_playerData.value[0].expCurrency}")
-        Log.d("test", "findyyy ${_multiMilestones.value[_multiMilestonesIndex.value]}")
-
-
         return _playerData.value[0].expCurrency >= _baseClickMilestones.value[_baseClickMilestonesIndex.value]
     }
 
+    //Used by Upgrade() to check if enough exp to buy multi upgrade.
     fun checkMultiAmount():Boolean{
-        Log.d("test", "findyyy ${_playerData.value[0].expCurrency}")
-        Log.d("test", "findyyy ${_multiMilestones.value[_multiMilestonesIndex.value]}")
-
-
         return _playerData.value[0].expCurrency >= _multiMilestones.value[_multiMilestonesIndex.value]
     }
 
