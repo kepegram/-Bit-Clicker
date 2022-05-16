@@ -1,6 +1,8 @@
 package com.example.gameappdev.screens
 
 import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -14,10 +16,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import com.example.gameappdev.navigation.TopBar
 import com.example.gameappdev.call.fetchPlayerStartData
@@ -37,13 +41,12 @@ fun HomeScreen(
     vm: PlayerViewModel
 )
 {
-    val scope = rememberCoroutineScope()
     Scaffold(
         topBar = {
             TopBar(
                 title = "Bit Clicker Home",
                 buttonIcon = Icons.Filled.Menu,
-                onButtonClicked = { openDrawer() }
+                onButtonClicked = { openDrawer() },
             )
         },
         floatingActionButton = {
@@ -116,6 +119,21 @@ fun HomeScreen(
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(30.dp),
             )
+
+            ExtendedFloatingActionButton(
+                text = { showText() },
+                onClick = { vm.shareIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(context,vm.shareIntent, Bundle.EMPTY)
+                          },
+                shape = RectangleShape,
+                modifier = Modifier.padding(0.dp,0.dp)
+            )
+
         }
     }
+}
+
+@Composable
+fun showText(){
+    Text("Share this Game!", modifier = Modifier.padding(  10.dp))
 }
