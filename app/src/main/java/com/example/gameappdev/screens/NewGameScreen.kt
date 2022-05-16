@@ -48,7 +48,7 @@ fun NewGameScreen(
                 modifier = Modifier.padding(1.dp)
             ) {
                 //Displays the level of the player.
-                Text("Level: ${vm.getCurrentLevel()}", fontSize = 28.sp )
+                Text("Level: ${vm.getCurrentLevel().toString(radix = 2)}", fontSize = 28.sp )
             }
             Image(
                 painter = painterResource(R.drawable.logo),
@@ -94,7 +94,7 @@ fun NewGameScreen(
                     .width(300.dp)
             ) {
                 Text(
-                    text = vm.displayCounter.value.toString(),
+                    text = vm.displayCounter.value.toString(radix = 2),
                     modifier = Modifier.padding(16.dp),
                     fontWeight = FontWeight.Bold,
                     fontSize = 28.sp

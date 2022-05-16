@@ -128,7 +128,7 @@ fun HomeScreen(
                 startActivity(context,vm.shareIntent, Bundle.EMPTY)
             },
             shape = Shapes.small,
-            modifier = Modifier.padding(start = 115.dp)
+            modifier = Modifier.padding(start = 103.dp)
         )
     }
 }

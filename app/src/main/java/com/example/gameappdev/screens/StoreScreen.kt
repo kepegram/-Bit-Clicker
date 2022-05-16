@@ -38,7 +38,7 @@ fun StoreScreen(navController: NavController, vm: PlayerViewModel) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally)
             {
-                Upgrades(vm)
+                Upgrades(vm,navController)
             }
         }
         Column(
@@ -55,8 +55,8 @@ fun StoreScreen(navController: NavController, vm: PlayerViewModel) {
 // Composable creating each store screen card
 
 @Composable
-fun Upgrades(vm: PlayerViewModel) {
-    val idx = 0
+fun Upgrades(vm: PlayerViewModel, navController: NavController) {
+
     LazyColumn()
     {
         items(2) {index ->
@@ -76,7 +76,7 @@ fun Upgrades(vm: PlayerViewModel) {
                             modifier = Modifier.padding(top = 25.dp, start = 5.dp)
                         )
                         Text(
-                            text = "Price ${vm.getBaseClickUpgradePrice()}",
+                            text = "Price ${vm.getBaseClickUpgradePrice().toString(radix = 2)}",
                             fontSize = 20.sp,
                             modifier = Modifier.padding(top = 45.dp, start = 5.dp)
                         )
@@ -88,7 +88,7 @@ fun Upgrades(vm: PlayerViewModel) {
                             modifier = Modifier.padding(top = 25.dp, start = 5.dp)
                         )
                         Text(
-                            text = "Price ${vm.getMultiUpgradePrice()}",
+                            text = "Price ${vm.getMultiUpgradePrice().toString(radix = 2)}",
                             fontSize = 20.sp,
                             modifier = Modifier.padding(top = 45.dp, start = 5.dp)
                         )
@@ -115,10 +115,15 @@ fun Upgrades(vm: PlayerViewModel) {
                             TextButton(
                                 onClick = { openDialog.value = false
                                     //Deals with upgrade onConfirm click.
-                                    if (index == 0)
+                                    if (index == 0) {
                                         vm.dealWithBaseClickUpgrade()
-                                    else
+                                        run { navController.navigate("newGame") }
+                                    }
+                                    else {
                                         vm.dealWithMultiUpgrade()
+                                        run { navController.navigate("newGame") }
+                                    }
+
                                 }) {
                                 Text("Confirm")
                             }
