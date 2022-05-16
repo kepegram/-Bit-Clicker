@@ -1,13 +1,15 @@
 # Bit Clicker
 
-Bit Clicker is an application that relieves stress during a Comp Sci students stressful life. Simply start a new game is click forever!
+It's towards the end of the semester and finals week is upon us students. Between having final projects due, numerous final exams, rent due, etc., a comp sci students life can become very stressful, very fast. Here's where Bit Clicker comes in to play.
+Bit Clicker is an application that relieves stress during a Comp Sci students stressful life! Simply start a new game and click forever! Progress through levels and earn upgrades from a simple click of button! Mindless fun!
 
 ## Installation
 
-Checkout the latest commit and get to clicking!
+Pull the final commit and get to clicking!
 
 ```git
-git checkout master
+git fetch
+git pull
 ```
 
 ## Usage
