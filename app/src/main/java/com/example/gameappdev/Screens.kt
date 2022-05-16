@@ -165,19 +165,6 @@ fun HomeScreen(
     }
 }
 
-@Composable
-fun CircleImage(/*imageSize: Dp*/) {
-    Image(
-        painter = painterResource(R.drawable.logo),
-        contentDescription = "Circle Image",
-        contentScale = ContentScale.Crop,
-        modifier = Modifier
-            .size(350.dp)
-            .clip(CircleShape)
-            .border(5.dp, Color.Gray, CircleShape)
-    )
-}
-
 //@SuppressLint("CoroutineCreationDuringComposition")
 
 @Composable
@@ -205,11 +192,20 @@ fun NewGameScreen(
                     //Displays the level of the player.
                     Text("Level: ${vm.getCurrentLevel()}", fontSize = 28.sp )
                 }
-                CircleImage()
+                //CircleImage()
+                Image(
+                    painter = painterResource(R.drawable.logo),
+                    contentDescription = "Circle Image",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(350.dp)
+                        .clip(CircleShape)
+                        .border(5.dp, Color.Gray, CircleShape)
+                )
                 TextButton(onClick = { }) {
                     Text(
                         text = "CLICK BELOW!",
-                        color = Color.White,
+                        color = MaterialTheme.colors.secondary,
                         modifier = Modifier.padding(top = 5.dp)
                     )
                 }
@@ -301,7 +297,7 @@ fun Upgrades(vm: PlayerViewModel) {
                 shape = RoundedCornerShape(5.dp),
                 elevation = 10.dp,
                 modifier = Modifier
-                    .padding(start = 16.dp, end = 16.dp, top = 5.dp, bottom = 5.dp)
+                    .padding(start = 15.dp, end = 15.dp, top = 25.dp, bottom = 25.dp)
                     .fillMaxWidth()
             ) {
                 Column(
@@ -310,17 +306,21 @@ fun Upgrades(vm: PlayerViewModel) {
                         Text(
                             text = "Upgrade BaseClick Value",
                             fontSize = 30.sp,
-                            modifier = Modifier.padding(top = 45.dp)
+                            modifier = Modifier.padding(top = 25.dp, start = 5.dp)
                         )
                         Text(
                             text = "Price ${vm.getBaseClickUpgradePrice()}",
                             fontSize = 20.sp,
-                            modifier = Modifier.padding(top = 45.dp)
+                            modifier = Modifier.padding(top = 45.dp, start = 5.dp)
                         )
                     }
                     else{
-                        Text(text = "Upgrade Multiplier", fontSize = 30.sp, modifier = Modifier.padding(top = 45.dp))
-                        Text(text = "Price ${vm.getMultiUpgradePrice()}", fontSize = 20.sp, modifier = Modifier.padding(top = 45.dp))
+                        Text(text = "Upgrade Multiplier",
+                            fontSize = 30.sp,
+                            modifier = Modifier.padding(top = 25.dp, start = 5.dp))
+                        Text(text = "Price ${vm.getMultiUpgradePrice()}",
+                            fontSize = 20.sp,
+                            modifier = Modifier.padding(top = 45.dp, start = 5.dp))
                     }
 
                 }
@@ -334,7 +334,7 @@ fun Upgrades(vm: PlayerViewModel) {
                             onClick = { openDialog.value = true },
                             modifier = Modifier
                                 .scale(1f)
-                                .padding(top = 0.dp, bottom = 15.dp, end = 50.dp)
+                                .padding(top = 75.dp, bottom = 10.dp, end = 5.dp)
                         ) {
                             Text("PURCHASE!")
                         }
@@ -404,6 +404,7 @@ fun SettingsScreen(navController: NavController) {
         },
         bottomBar = { BottomNavigationBar(navController) }
     ) {
+        MatrixRain()
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
