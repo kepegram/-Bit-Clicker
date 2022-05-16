@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -27,6 +28,7 @@ import com.example.gameappdev.navigation.TopBar
 import com.example.gameappdev.call.fetchPlayerStartData
 import com.example.gameappdev.database.DataApplication
 import com.example.gameappdev.navigation.BottomNavigationBar
+import com.example.gameappdev.ui.theme.Shapes
 import com.example.gameappdev.viewmodel.PlayerViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -119,21 +121,19 @@ fun HomeScreen(
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(30.dp),
             )
-
-            ExtendedFloatingActionButton(
-                text = { showText() },
-                onClick = { vm.shareIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(context,vm.shareIntent, Bundle.EMPTY)
-                          },
-                shape = RectangleShape,
-                modifier = Modifier.padding(0.dp,0.dp)
-            )
-
         }
+        ExtendedFloatingActionButton(
+            text = { showText() },
+            onClick = { vm.shareIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(context,vm.shareIntent, Bundle.EMPTY)
+            },
+            shape = Shapes.small,
+            modifier = Modifier.padding(start = 115.dp)
+        )
     }
 }
 
 @Composable
 fun showText(){
-    Text("Share this Game!", modifier = Modifier.padding(  10.dp))
+    Text("Share this Game!", modifier = Modifier.padding(10.dp))
 }
