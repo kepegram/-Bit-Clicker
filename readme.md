@@ -15,3 +15,9 @@ git pull
 ## Usage
 
 Once fully installed on your emulator, simply click the "+" and get to clicking! Don't be afraid to navigate away as your score will remain!
+
+## Development Disclaimer
+
+Assistance from a few sources. Android developers site as well as a few youtube videos. Guides and tutorials were followed and altered to fit app theme and usuage.
+
+# THANKS FOR PLAYING
